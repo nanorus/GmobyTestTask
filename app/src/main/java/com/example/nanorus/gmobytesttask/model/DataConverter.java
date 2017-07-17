@@ -30,8 +30,4 @@ public class DataConverter {
         return date;
     }
 
-    public static int convertKelvinToCelsius(double kelvin){
-        return (int) Math.round(kelvin)-273;
-    }
-
 }

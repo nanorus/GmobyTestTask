@@ -2,7 +2,7 @@ package com.example.nanorus.gmobytesttask.presenter;
 
 public interface IRoutesPresenter {
 
-    void updateListOnline();
+    void updateListOnline(int fromDate, int toDate);
 
     void updateListOffline();
 

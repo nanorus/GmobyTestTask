@@ -14,8 +14,6 @@ import rx.schedulers.Schedulers;
 
 public class DataManager {
 
-
-
     public static Observable<List<RouteMainInfoPojo>> getRoutesMainInfoListOnline(int fromDate, int toDate) {
         GetAllRoutersService service = RoutesRetroClient.getInstance().create(GetAllRoutersService.class);
 

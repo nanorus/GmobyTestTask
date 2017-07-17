@@ -7,7 +7,6 @@ import com.example.nanorus.gmobytesttask.view.IRoutesListFragment;
 import java.util.List;
 
 import rx.Observable;
-import rx.Subscriber;
 
 public class RoutesPresenter implements IRoutesPresenter {
 
@@ -15,33 +14,15 @@ public class RoutesPresenter implements IRoutesPresenter {
 
     public RoutesPresenter(IRoutesListFragment view) {
         mView = view;
-
-
-        Observable<List<RouteMainInfoPojo>> routesMainInfos = DataManager.getRoutesMainInfoListOnline(20140101, 20170501);
-        routesMainInfos.subscribe(new Subscriber<List<RouteMainInfoPojo>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                System.out.println(e.getMessage());
-            }
-
-            @Override
-            public void onNext(List<RouteMainInfoPojo> routeMainInfoPojos) {
-
-                // add to adapter
-
-            }
-        });
-
-
+        updateListOnline(20140101, 20170501);
     }
 
     @Override
-    public void updateListOnline() {
-
+    public void updateListOnline(int fromDate, int toDate) {
+        Observable<List<RouteMainInfoPojo>> routesMainInfos = DataManager.getRoutesMainInfoListOnline(fromDate, toDate);
+        routesMainInfos.subscribe(
+                routeMainInfoPojos -> mView.updateAdapter(routeMainInfoPojos),
+                throwable -> System.out.println(throwable.getMessage()));
     }
 
     @Override
