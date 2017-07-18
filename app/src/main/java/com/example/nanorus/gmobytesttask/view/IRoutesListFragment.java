@@ -8,9 +8,7 @@ import java.util.List;
 
 public interface IRoutesListFragment {
 
-    void createAdapter();
-
-    void setAdapter(List<RouteMainInfoPojo> routeMainInfoPojos);
+    void createAndSetAdapter();
 
     void updateAdapter(List<RouteMainInfoPojo> routeMainInfoPojos);
 
