@@ -10,6 +10,8 @@ public interface IRoutesListFragment {
 
     void createAndSetAdapter();
 
+    void addDataToListAndUpdateAdapter(RouteMainInfoPojo routeMainInfoPojo);
+
     void updateAdapter(List<RouteMainInfoPojo> routeMainInfoPojos);
 
     IRoutesListFragment getViewLayer();

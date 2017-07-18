@@ -98,7 +98,7 @@ public class DatabaseManager {
                     String tableNameToCity = DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY;
 
                     // define names of columns
-                    String columnId = tableNameRoutes + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_ID;
+                    String columnIdName = tableNameRoutes + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_ID;
                     String columnFromDateName = tableNameRoutes + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_DATE;
                     String columnToDateName = tableNameRoutes + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_DATE;
                     String columnPriceName = tableNameRoutes + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_PRICE;
@@ -108,12 +108,12 @@ public class DatabaseManager {
                     String comma = ",";
 
                     Cursor cursor = database.rawQuery("SELECT " +
-                                    columnId + comma +
-                                    columnFromDateName + comma +
-                                    columnToDateName + comma +
-                                    columnPriceName + comma +
-                                    columnFromCityName + comma +
-                                    columnToCityName +
+                                    columnIdName + " AS Id" + comma +
+                                    columnFromDateName + " AS FromDate" + comma +
+                                    columnToDateName + " AS ToDate" + comma +
+                                    columnPriceName + " AS Price" + comma +
+                                    columnFromCityName + " AS FromCity" + comma +
+                                    columnToCityName + " AS ToCity" +
 
                                     " FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES +
 
@@ -128,12 +128,12 @@ public class DatabaseManager {
                     if (cursor.moveToFirst()) {
                         do {
                             subscriber.onNext(new RouteMainInfoPojo(
-                                    cursor.getInt(cursor.getColumnIndex(columnId)),
-                                    cursor.getString(cursor.getColumnIndex(columnFromCityName)),
-                                    cursor.getString(cursor.getColumnIndex(columnToCityName)),
-                                    cursor.getString(cursor.getColumnIndex(columnFromDateName)),
-                                    cursor.getString(cursor.getColumnIndex(columnToDateName)),
-                                    cursor.getInt(cursor.getColumnIndex(columnPriceName))
+                                    cursor.getInt(cursor.getColumnIndex("Id")),
+                                    cursor.getString(cursor.getColumnIndex("FromCity")),
+                                    cursor.getString(cursor.getColumnIndex("ToCity")),
+                                    cursor.getString(cursor.getColumnIndex("FromDate")),
+                                    cursor.getString(cursor.getColumnIndex("ToDate")),
+                                    cursor.getInt(cursor.getColumnIndex("Price"))
                             ));
                         }
                         while (cursor.moveToNext());

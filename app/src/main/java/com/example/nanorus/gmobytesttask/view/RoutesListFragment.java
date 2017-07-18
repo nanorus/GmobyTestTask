@@ -66,6 +66,13 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     }
 
     @Override
+    public void addDataToListAndUpdateAdapter(RouteMainInfoPojo routeMainInfoPojo) {
+        mData.add(routeMainInfoPojo);
+        mAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
     public void updateAdapter(List<RouteMainInfoPojo> newData) {
         mData.clear();
         mData.addAll(newData);
