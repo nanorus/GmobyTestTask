@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.bus;
+package com.example.nanorus.gmobytesttask.app.bus;
 
 import com.squareup.otto.Bus;
 

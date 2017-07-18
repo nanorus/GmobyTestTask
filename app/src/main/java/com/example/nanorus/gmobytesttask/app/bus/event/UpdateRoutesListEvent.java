@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.bus.event;
+package com.example.nanorus.gmobytesttask.app.bus.event;
 
 public class UpdateRoutesListEvent {
 

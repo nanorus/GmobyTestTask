@@ -2,13 +2,15 @@ package com.example.nanorus.gmobytesttask.model.pojo;
 
 public class RouteMainInfoPojo {
 
+    private int id;
     private String fromCityName;
     private String toCityName;
     private String fromDate;
     private String toDate;
     private int price;
 
-    public RouteMainInfoPojo(String fromCityName, String toCityName, String fromDate, String toDate, int price) {
+    public RouteMainInfoPojo(int id, String fromCityName, String toCityName, String fromDate, String toDate, int price) {
+        this.id = id;
         this.fromCityName = fromCityName;
         this.toCityName = toCityName;
         this.fromDate = fromDate;
