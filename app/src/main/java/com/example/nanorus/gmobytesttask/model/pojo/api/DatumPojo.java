@@ -46,6 +46,22 @@ public class DatumPojo {
     @Expose
     private int reservationCount;
 
+    public DatumPojo(int id, FromCityPojo fromCity, String fromDate, String fromTime, String fromInfo, ToCityPojo toCity, String toDate, String toTime, String toInfo, String info, int price, int busId, int reservationCount) {
+        this.id = id;
+        this.fromCity = fromCity;
+        this.fromDate = fromDate;
+        this.fromTime = fromTime;
+        this.fromInfo = fromInfo;
+        this.toCity = toCity;
+        this.toDate = toDate;
+        this.toTime = toTime;
+        this.toInfo = toInfo;
+        this.info = info;
+        this.price = price;
+        this.busId = busId;
+        this.reservationCount = reservationCount;
+    }
+
     public int getId() {
         return id;
     }
@@ -150,4 +166,22 @@ public class DatumPojo {
         this.reservationCount = reservationCount;
     }
 
+    @Override
+    public String toString() {
+        return "DatumPojo{" +
+                "id=" + id +
+                ", fromCity=" + fromCity.getName() +
+                ", fromDate='" + fromDate + '\'' +
+                ", fromTime='" + fromTime + '\'' +
+                ", fromInfo='" + fromInfo + '\'' +
+                ", toCity=" + toCity.getName() +
+                ", toDate='" + toDate + '\'' +
+                ", toTime='" + toTime + '\'' +
+                ", toInfo='" + toInfo + '\'' +
+                ", info='" + info + '\'' +
+                ", price=" + price +
+                ", busId=" + busId +
+                ", reservationCount=" + reservationCount +
+                '}';
+    }
 }

@@ -16,9 +16,21 @@
 
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
+    <FrameLayout
+        android:id="@+id/frgmCont"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/route_info_toolbar"
+        >
+    </FrameLayout>
 
-    <fragment
-        android:id="@+id/fragment"
+ <!--   <fragment
+        android:id="@+id/fragmentRouteInfo"
         android:name="com.example.nanorus.gmobytesttask.view.route_info.RouteInfoFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,4 +40,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/route_info_toolbar"/>
+        -->
 </RelativeLayout>

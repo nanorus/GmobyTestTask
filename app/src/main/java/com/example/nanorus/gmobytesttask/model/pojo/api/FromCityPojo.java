@@ -16,6 +16,12 @@ public class FromCityPojo {
     @Expose
     private String name;
 
+    public FromCityPojo(int highlight, int id, String name) {
+        this.highlight = highlight;
+        this.id = id;
+        this.name = name;
+    }
+
     public int getHighlight() {
         return highlight;
     }

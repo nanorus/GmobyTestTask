@@ -4,6 +4,7 @@ import com.example.nanorus.gmobytesttask.model.api.RoutesRetroClient;
 import com.example.nanorus.gmobytesttask.model.api.service.GetAllRoutersService;
 import com.example.nanorus.gmobytesttask.model.database.DatabaseManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
+import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
 
 import rx.Observable;
@@ -20,6 +21,11 @@ public class DataManager {
     public static Observable<RouteMainInfoPojo> loadRoutesMainInfoOffline(int fromDate, int toDate) {
         Observable<RouteMainInfoPojo> routeMainInfoPojoObservable = DatabaseManager.getRoutesMainInfo(fromDate, toDate);
         return routeMainInfoPojoObservable;
+    }
+
+    public static Observable<DatumPojo> getRouteFullInfo(int routeId) {
+        Observable<DatumPojo> routeFullInfoPojoObservable = DatabaseManager.getRouteFullInfo(routeId);
+        return routeFullInfoPojoObservable;
     }
 
     public static void saveRoutes(RequestPojo requestPojo, boolean inNewThread) {

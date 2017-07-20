@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.nanorus.gmobytesttask.R;
+import com.example.nanorus.gmobytesttask.app.Router;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesActivityPresenter;
 
@@ -29,7 +30,8 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
                 () -> mPresenter.onRefresh()
         );
 
-
+        // test
+        Router.navigateToRouteInfoActivity(this, 5);
     }
 
     @Override

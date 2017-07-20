@@ -35,7 +35,7 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     RecyclerView fragment_routes_list_rv_list;
     TextView fragment_routes_list_tv_no_data;
 
-    OnSnackBarEventListener snackBarEventListener;
+    OnSnackBarEventListener mSnackBarEventListener;
 
     public interface OnSnackBarEventListener {
         void showSnackBar(String message, int duration);
@@ -44,7 +44,7 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     @Override
     public void onAttach(Activity activity) {
         try {
-            snackBarEventListener = (OnSnackBarEventListener) activity;
+            mSnackBarEventListener = (OnSnackBarEventListener) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     @Override
     public void onAttach(Context context) {
         try {
-            snackBarEventListener = (OnSnackBarEventListener) context;
+            mSnackBarEventListener = (OnSnackBarEventListener) context;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -118,12 +118,12 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
     @Override
     public void showSnackBarNoInternet() {
-        snackBarEventListener.showSnackBar(App.getApp().getString(R.string.no_internet), Snackbar.LENGTH_LONG);
+        mSnackBarEventListener.showSnackBar(App.getApp().getString(R.string.no_internet), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void showSnackBarServerError() {
-        snackBarEventListener.showSnackBar(App.getApp().getString(R.string.server_error), Snackbar.LENGTH_LONG);
+        mSnackBarEventListener.showSnackBar(App.getApp().getString(R.string.server_error), Snackbar.LENGTH_LONG);
 
     }
 
