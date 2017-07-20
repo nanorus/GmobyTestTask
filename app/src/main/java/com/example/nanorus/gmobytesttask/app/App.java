@@ -20,4 +20,6 @@ public class App extends Application {
         sInstance = null;
         super.finalize();
     }
+
+
 }

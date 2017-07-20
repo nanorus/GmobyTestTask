@@ -30,7 +30,7 @@
 
         <fragment
             android:id="@+id/fragment"
-            android:name="com.example.nanorus.gmobytesttask.view.RoutesListFragment"
+            android:name="com.example.nanorus.gmobytesttask.view.routes_list.RoutesListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </android.support.v4.widget.SwipeRefreshLayout>

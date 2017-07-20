@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.view;
+package com.example.nanorus.gmobytesttask.view.routes_list;
 
 import android.content.Context;
 
@@ -13,6 +13,16 @@ public interface IRoutesListFragment {
     void addDataToListAndUpdateAdapter(RouteMainInfoPojo routeMainInfoPojo);
 
     void updateAdapter(List<RouteMainInfoPojo> routeMainInfoPojos);
+
+    void showSnackBarNoInternet();
+
+    void showSnackBarServerError();
+
+    void showNoDataText();
+
+    void hideNoDataText();
+
+    int getListItemsCount();
 
     IRoutesListFragment getViewLayer();
 

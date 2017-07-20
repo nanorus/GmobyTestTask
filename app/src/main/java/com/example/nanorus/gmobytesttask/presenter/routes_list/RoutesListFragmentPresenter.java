@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.presenter;
+package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
 import com.example.nanorus.gmobytesttask.app.bus.event.ShowRefreshingEvent;
@@ -7,7 +7,8 @@ import com.example.nanorus.gmobytesttask.model.DataConverter;
 import com.example.nanorus.gmobytesttask.model.DataManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
-import com.example.nanorus.gmobytesttask.view.IRoutesListFragment;
+import com.example.nanorus.gmobytesttask.utils.InternetConnection;
+import com.example.nanorus.gmobytesttask.view.routes_list.IRoutesListFragment;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -17,17 +18,16 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class RoutesPresenter implements IRoutesPresenter {
+public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter {
 
     private IRoutesListFragment mView;
 
     private Subscription updateListOnlineSubscription;
     private Subscription updateListOfflineSubscription;
 
-    public RoutesPresenter(IRoutesListFragment view) {
+    public RoutesListFragmentPresenter(IRoutesListFragment view) {
         mView = view;
         mView.createAndSetAdapter();
-        //   updateListOnline();
         updateListOffline();
 
         EventBus.getInstance().register(this);
@@ -44,17 +44,35 @@ public class RoutesPresenter implements IRoutesPresenter {
 
         updateListOnlineSubscription = requestPojoObservable.subscribe(
                 requestPojo -> {
-                    routeMainInfoPojos.addAll(DataConverter.convertFullRoutesListToMainInfoRouteList(requestPojo.getData()));
-                    mView.updateAdapter(routeMainInfoPojos);
-                    request[0] = requestPojo;
+                    try {
+                        routeMainInfoPojos.addAll(DataConverter.convertFullRoutesListToMainInfoRouteList(requestPojo.getData()));
+                        mView.updateAdapter(routeMainInfoPojos);
+                        request[0] = requestPojo;
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 },
 
                 throwable -> System.out.println(throwable.getMessage()),
 
                 () -> {
-                    DataManager.saveRoutes(request[0]);
-                    EventBus.getInstance().post(new ShowRefreshingEvent(false));
-                    updateListOnlineSubscription.unsubscribe();
+                    if (request[0].isSuccess()) {
+                        if (request[0].getData().size() == 0)
+                            mView.showNoDataText();
+                        else
+                            mView.hideNoDataText();
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                DataManager.cleanSavedRoutes(false);
+                                DataManager.saveRoutes(request[0], false);
+                                super.run();
+                            }
+                        }.start();
+                        EventBus.getInstance().post(new ShowRefreshingEvent(false));
+                    } else {
+                        mView.showSnackBarServerError();
+                    }
                 }
         );
     }
@@ -66,13 +84,20 @@ public class RoutesPresenter implements IRoutesPresenter {
                 routeMainInfoPojo -> mView.addDataToListAndUpdateAdapter(routeMainInfoPojo),
                 throwable -> System.out.println(throwable.getMessage()),
                 () -> {
-                    updateListOfflineSubscription.unsubscribe();
+                    if (mView.getListItemsCount() == 0)
+                        if (InternetConnection.isOnline()) {
+                            updateListOnline();
+                        } else {
+                            mView.showSnackBarNoInternet();
+                        }
                 }
         );
     }
 
     @Override
     public void releasePresenter() {
+        EventBus.getInstance().unregister(this);
+
         if (updateListOnlineSubscription != null && !updateListOnlineSubscription.isUnsubscribed())
             updateListOnlineSubscription.unsubscribe();
         if (updateListOfflineSubscription != null && !updateListOfflineSubscription.isUnsubscribed())

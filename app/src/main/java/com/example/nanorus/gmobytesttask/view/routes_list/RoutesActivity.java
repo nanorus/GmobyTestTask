@@ -1,32 +1,34 @@
-package com.example.nanorus.gmobytesttask.view;
+package com.example.nanorus.gmobytesttask.view.routes_list;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
-import com.example.nanorus.gmobytesttask.app.bus.event.ShowRefreshingEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.UpdateRoutesListEvent;
-import com.squareup.otto.Subscribe;
+import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesActivityPresenter;
 
-public class RoutesActivity extends AppCompatActivity implements IRoutesActivity {
+public class RoutesActivity extends AppCompatActivity implements IRoutesActivity, RoutesListFragment.OnSnackBarEventListener {
 
     SwipeRefreshLayout activity_routes_swipe;
+    RoutesActivityPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
 
+        mPresenter = new RoutesActivityPresenter(getView());
         EventBus.getInstance().register(this);
 
         activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
+
+
         activity_routes_swipe.setOnRefreshListener(
-                () -> {
-                    EventBus.getInstance().post(new UpdateRoutesListEvent());
-                }
+                () -> mPresenter.onRefresh()
         );
+
 
     }
 
@@ -44,16 +46,25 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
     }
 
     @Override
+    public void showSnackBarNoInternet() {
+        Snackbar.make(this.findViewById(android.R.id.content), this.getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
     public IRoutesActivity getView() {
         return this;
     }
 
-    @Subscribe
-    public void ShowRefreshingListener(ShowRefreshingEvent event) {
-        if (event.isShowRefresh())
-            startShowRefreshing();
-        else
-            stopShowRefreshing();
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.releasePresenter();
+        mPresenter = null;
+        super.onDestroy();
     }
 
+    @Override
+    public void showSnackBar(String message, int duration) {
+        Snackbar.make(this.findViewById(android.R.id.content), message, duration).show();
+    }
 }

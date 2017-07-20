@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.view;
+package com.example.nanorus.gmobytesttask.view.route_info;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import com.example.nanorus.gmobytesttask.R;
 
 
 public class RouteInfoFragment extends Fragment {
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

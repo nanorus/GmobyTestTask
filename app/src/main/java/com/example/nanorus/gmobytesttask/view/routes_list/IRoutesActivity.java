@@ -1,10 +1,13 @@
-package com.example.nanorus.gmobytesttask.view;
+package com.example.nanorus.gmobytesttask.view.routes_list;
 
 public interface IRoutesActivity {
+
 
     void startShowRefreshing();
 
     void stopShowRefreshing();
+
+    void showSnackBarNoInternet();
 
     IRoutesActivity getView();
 

@@ -18,12 +18,34 @@ public class DataManager {
     }
 
     public static Observable<RouteMainInfoPojo> loadRoutesMainInfoOffline(int fromDate, int toDate) {
-        Observable<RouteMainInfoPojo>  routeMainInfoPojoObservable =   DatabaseManager.getRoutesMainInfo(fromDate, toDate);
+        Observable<RouteMainInfoPojo> routeMainInfoPojoObservable = DatabaseManager.getRoutesMainInfo(fromDate, toDate);
         return routeMainInfoPojoObservable;
     }
 
-    public static void saveRoutes(RequestPojo requestPojo) {
-        DatabaseManager.putRoutes(requestPojo);
+    public static void saveRoutes(RequestPojo requestPojo, boolean inNewThread) {
+        if (inNewThread) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    DatabaseManager.putRoutes(requestPojo);
+                }
+            };
+            thread.start();
+        } else
+            DatabaseManager.putRoutes(requestPojo);
+    }
+
+    public static void cleanSavedRoutes(boolean inNewThread) {
+        if (inNewThread) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    DatabaseManager.cleanSavedRoutes();
+                }
+            };
+            thread.start();
+        } else
+            DatabaseManager.cleanSavedRoutes();
     }
 
 

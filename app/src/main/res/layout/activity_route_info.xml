@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.example.nanorus.gmobytesttask.view.RouteInfoFragment"
+        android:name="com.example.nanorus.gmobytesttask.view.route_info.RouteInfoFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
