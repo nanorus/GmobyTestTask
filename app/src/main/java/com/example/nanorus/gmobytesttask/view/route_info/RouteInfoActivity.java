@@ -34,8 +34,7 @@ public class RouteInfoActivity extends AppCompatActivity implements IRouteInfoAc
         fragmentTransaction.add(R.id.frgmCont, routeInfoFragment);
         fragmentTransaction.commit();
 
-
-
+        mPresenter = new RouteInfoActivityPresenter(getView());
     }
 
 
@@ -45,4 +44,10 @@ public class RouteInfoActivity extends AppCompatActivity implements IRouteInfoAc
         return this;
     }
 
+    @Override
+    protected void onDestroy() {
+        mPresenter.releasePresenter();
+        mPresenter = null;
+        super.onDestroy();
+    }
 }

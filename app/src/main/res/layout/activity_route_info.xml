@@ -2,12 +2,14 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/route_info_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:theme="@style/ToolbarStyle"
         android:background="@color/colorPrimary">
 
         <RelativeLayout
@@ -18,11 +20,12 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Маршрут"
-                android:textColor="@android:color/black"
+                android:text="@string/Route"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
+
     <FrameLayout
         android:id="@+id/frgmCont"
         android:layout_width="match_parent"
@@ -35,5 +38,12 @@
         android:layout_below="@+id/route_info_toolbar"
         >
     </FrameLayout>
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/route_info_toolbar"
+        android:background="@drawable/toolbar_shadow"/>
 
 </RelativeLayout>

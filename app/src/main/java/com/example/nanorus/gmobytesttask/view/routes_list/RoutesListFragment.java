@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +35,7 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
     RecyclerView fragment_routes_list_rv_list;
     TextView fragment_routes_list_tv_no_data;
+    NestedScrollView fragment_routes_list_nested;
 
     RoutesListEventListener mRoutesListEventListener;
 
@@ -87,6 +90,8 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
         fragment_routes_list_rv_list = (RecyclerView) v.findViewById(R.id.fragment_routes_list_rv_list);
         fragment_routes_list_tv_no_data = (TextView) v.findViewById(R.id.fragment_routes_list_tv_no_data);
         hideNoDataText();
+        fragment_routes_list_nested = (NestedScrollView) v.findViewById(R.id.fragment_routes_list_nested);
+        fragment_routes_list_nested.post(() -> fragment_routes_list_nested.scrollTo(0, 0));
 
         mPresenter = new RoutesListFragmentPresenter(getViewLayer());
 
@@ -95,6 +100,7 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
             mPresenter.onListItemClicked();
         });
 
+        ViewCompat.setNestedScrollingEnabled(fragment_routes_list_rv_list, false);
 
         return v;
     }

@@ -16,7 +16,7 @@ import com.example.nanorus.gmobytesttask.presenter.route_info.RouteInfoFragmentP
 
 public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
 
-    private RouteInfoFragmentPresenter mPresetner;
+    private RouteInfoFragmentPresenter mPresenter;
 
     TextView fragment_route_info_tv_fromCity;
     TextView fragment_route_info_tv_toCity;
@@ -61,7 +61,7 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
         fragment_route_info_tv_busId = (TextView) v.findViewById(R.id.fragment_route_info_tv_busId);
         fragment_route_info_tv_reservationCount = (TextView) v.findViewById(R.id.fragment_route_info_tv_reservationCount);
 
-        mPresetner = new RouteInfoFragmentPresenter(this, this.getArguments().getInt("id"));
+        mPresenter = new RouteInfoFragmentPresenter(this, this.getArguments().getInt("id"));
 
         return v;
     }
@@ -73,8 +73,9 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
 
     @Override
     public void onDetach() {
+        mPresenter.releasePresenter();
+        mPresenter = null;
         super.onDetach();
-        mPresetner = null;
     }
 
     @Override

@@ -169,7 +169,7 @@ public class DatabaseManager {
                         while (cursor.moveToNext());
                     }
                     subscriber.onCompleted();
-                    //   database.close();
+                    cursor.close();
                 });
         return routesMainInfo;
     }

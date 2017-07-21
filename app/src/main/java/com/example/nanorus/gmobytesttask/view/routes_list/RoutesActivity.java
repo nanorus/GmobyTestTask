@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
@@ -18,7 +17,6 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
 
     AlertDialog simpleAlert;
 
-    Toolbar route_info_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +85,6 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
                 simpleAlert.setMessage(message);
                 simpleAlert.show();
             }
-
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             simpleAlert = builder.setMessage(message)

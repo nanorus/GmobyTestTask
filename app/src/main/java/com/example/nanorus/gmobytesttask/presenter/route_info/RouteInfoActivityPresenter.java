@@ -4,10 +4,14 @@ import com.example.nanorus.gmobytesttask.view.route_info.IRouteInfoActivity;
 
 public class RouteInfoActivityPresenter implements IRouteInfoActivityPresenter {
 
-    IRouteInfoActivity mView;
+    private IRouteInfoActivity mView;
+
+    public RouteInfoActivityPresenter(IRouteInfoActivity view) {
+        mView = view;
+    }
 
     @Override
     public void releasePresenter() {
-
+        mView = null;
     }
 }
