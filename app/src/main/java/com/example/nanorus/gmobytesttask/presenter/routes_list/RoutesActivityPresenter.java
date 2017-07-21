@@ -13,8 +13,6 @@ public class RoutesActivityPresenter implements IRoutesActivityPresenter {
 
     public RoutesActivityPresenter(IRoutesActivity view) {
         mView = view;
-        System.out.println("RoutesPresenter: created");
-
         EventBus.getInstance().register(this);
     }
 

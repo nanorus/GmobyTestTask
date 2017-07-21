@@ -58,6 +58,12 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
         return this;
     }
 
+    @Override
+    protected void onPause() {
+        if (simpleAlert != null & simpleAlert.isShowing())
+            simpleAlert.dismiss();
+        super.onPause();
+    }
 
     @Override
     protected void onDestroy() {
