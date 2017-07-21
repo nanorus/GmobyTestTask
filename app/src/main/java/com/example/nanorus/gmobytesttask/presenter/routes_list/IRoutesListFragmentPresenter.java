@@ -8,4 +8,6 @@ public interface IRoutesListFragmentPresenter {
 
     void releasePresenter();
 
+    void onListItemClicked();
+
 }

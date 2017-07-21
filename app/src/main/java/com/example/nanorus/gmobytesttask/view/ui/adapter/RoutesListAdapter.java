@@ -43,6 +43,7 @@ public class RoutesListAdapter extends RecyclerView.Adapter<RoutesListAdapter.Ro
             return 0;
     }
 
+
     public static class RoutesListViewHolder extends RecyclerView.ViewHolder {
 
         TextView routes_list_item_tv_fromCity;

@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.app.App;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmentPresenter;
+import com.example.nanorus.gmobytesttask.view.ui.RecyclerViewItemClickSupport;
 import com.example.nanorus.gmobytesttask.view.ui.adapter.RoutesListAdapter;
 
 import java.util.ArrayList;
@@ -35,16 +34,23 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     RecyclerView fragment_routes_list_rv_list;
     TextView fragment_routes_list_tv_no_data;
 
-    OnSnackBarEventListener mSnackBarEventListener;
+    RoutesListEventListener mRoutesListEventListener;
 
-    public interface OnSnackBarEventListener {
-        void showSnackBar(String message, int duration);
+    private int mListItemClickedPosition = 0;
+
+    public interface RoutesListEventListener {
+        void showAlertLoadFail(String message);
+
+        void showAlert(String message);
+
+        void hideAlert();
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         try {
-            mSnackBarEventListener = (OnSnackBarEventListener) activity;
+            mRoutesListEventListener = (RoutesListEventListener) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -54,7 +60,7 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     @Override
     public void onAttach(Context context) {
         try {
-            mSnackBarEventListener = (OnSnackBarEventListener) context;
+            mRoutesListEventListener = (RoutesListEventListener) context;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -84,9 +90,14 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
         mPresenter = new RoutesListFragmentPresenter(getViewLayer());
 
+        RecyclerViewItemClickSupport.addTo(fragment_routes_list_rv_list).setOnItemClickListener((recyclerView, position, v1) -> {
+            mListItemClickedPosition = position;
+            mPresenter.onListItemClicked();
+        });
+
+
         return v;
     }
-
 
 
     @Override
@@ -117,17 +128,6 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     }
 
     @Override
-    public void showSnackBarNoInternet() {
-        mSnackBarEventListener.showSnackBar(App.getApp().getString(R.string.no_internet), Snackbar.LENGTH_LONG);
-    }
-
-    @Override
-    public void showSnackBarServerError() {
-        mSnackBarEventListener.showSnackBar(App.getApp().getString(R.string.server_error), Snackbar.LENGTH_LONG);
-
-    }
-
-    @Override
     public void showNoDataText() {
         fragment_routes_list_tv_no_data.setVisibility(View.VISIBLE);
     }
@@ -138,9 +138,43 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     }
 
     @Override
+    public void showAlertNoInternet() {
+        mRoutesListEventListener.showAlertLoadFail(this.getString(R.string.no_internet));
+    }
+
+    @Override
+    public void showAlertServerError() {
+        mRoutesListEventListener.showAlertLoadFail(this.getString(R.string.server_error));
+    }
+
+    @Override
+    public void showAlertLoading() {
+        mRoutesListEventListener.showAlert("Загрузка данных");
+    }
+
+    @Override
+    public void showAlertInsert() {
+        mRoutesListEventListener.showAlert("Сохранение данных");
+    }
+
+    @Override
+    public void hideAlert() {
+        mRoutesListEventListener.hideAlert();
+    }
+
+    @Override
     public int getListItemsCount() {
-        System.out.println("list items count: " + mData.size());
         return mData.size();
+    }
+
+    @Override
+    public RouteMainInfoPojo getDataByListPosition(int position) {
+        return mData.get(position);
+    }
+
+    @Override
+    public int getListItemClickedPosition() {
+        return mListItemClickedPosition;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
+import com.example.nanorus.gmobytesttask.app.Router;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
 import com.example.nanorus.gmobytesttask.app.bus.event.ShowRefreshingEvent;
 import com.example.nanorus.gmobytesttask.app.bus.event.UpdateRoutesListEvent;
@@ -35,6 +36,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     @Override
     public void updateListOnline() {
+        mView.showAlertLoading();
         ArrayList<RouteMainInfoPojo> routeMainInfoPojos = new ArrayList<>();
         final RequestPojo[] request = new RequestPojo[1];
 
@@ -66,12 +68,14 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                             public void run() {
                                 DataManager.cleanSavedRoutes(false);
                                 DataManager.saveRoutes(request[0], false);
+                                mView.hideAlert();
                                 super.run();
                             }
                         }.start();
                         EventBus.getInstance().post(new ShowRefreshingEvent(false));
+                        mView.showAlertInsert();
                     } else {
-                        mView.showSnackBarServerError();
+                        mView.showAlertServerError();
                     }
                 }
         );
@@ -88,7 +92,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                         if (InternetConnection.isOnline()) {
                             updateListOnline();
                         } else {
-                            mView.showSnackBarNoInternet();
+                            mView.showAlertNoInternet();
                         }
                 }
         );
@@ -104,6 +108,12 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
             updateListOfflineSubscription.unsubscribe();
 
         mView = null;
+    }
+
+    @Override
+    public void onListItemClicked() {
+        int clickedRouteId = mView.getDataByListPosition(mView.getListItemClickedPosition()).getId();
+        Router.navigateToRouteInfoActivity(mView.getViewContext(), clickedRouteId);
     }
 
     @Subscribe

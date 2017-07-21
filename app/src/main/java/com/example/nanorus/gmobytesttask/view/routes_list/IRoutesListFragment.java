@@ -14,15 +14,25 @@ public interface IRoutesListFragment {
 
     void updateAdapter(List<RouteMainInfoPojo> routeMainInfoPojos);
 
-    void showSnackBarNoInternet();
-
-    void showSnackBarServerError();
-
     void showNoDataText();
 
     void hideNoDataText();
 
+    void showAlertNoInternet();
+
+    void showAlertServerError();
+
+    void showAlertLoading();
+
+    void showAlertInsert();
+
+    void hideAlert();
+
     int getListItemsCount();
+
+    RouteMainInfoPojo getDataByListPosition(int position);
+
+    int getListItemClickedPosition();
 
     IRoutesListFragment getViewLayer();
 

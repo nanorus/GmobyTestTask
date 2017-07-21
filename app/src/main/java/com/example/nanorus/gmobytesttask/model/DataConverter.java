@@ -13,6 +13,20 @@ import java.util.Locale;
 
 public class DataConverter {
 
+    public static String convertApiDateFormatToCorrectDateFormat(String apiDateString){
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = parser.parse(apiDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.ENGLISH);
+        String format = formatter.format(date);
+        return format;
+
+    }
+
     public static Date convertStringToDate(String string) {
         Date date = null;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -44,8 +58,8 @@ public class DataConverter {
                     datumPojo.getId(),
                     datumPojo.getFromCity().getName(),
                     datumPojo.getToCity().getName(),
-                    datumPojo.getFromDate(),
-                    datumPojo.getToDate(),
+                    DataConverter.convertApiDateFormatToCorrectDateFormat(datumPojo.getFromDate() + " " + datumPojo.getFromTime()),
+                    DataConverter.convertApiDateFormatToCorrectDateFormat(datumPojo.getToDate() + " " + datumPojo.getToTime()),
                     datumPojo.getPrice()
             ));
         }

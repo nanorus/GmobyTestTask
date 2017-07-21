@@ -3,7 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#e6e6e6">
+                android:background="#f8f8f8">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -14,12 +14,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:text="Основное"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"/>
+
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@android:color/white"
-                app:cardElevation="2dp">
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -27,10 +45,35 @@
                     android:padding="8dp">
 
                     <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/fragment_route_info_tv_fromCity"
+                        android:layout_marginTop="8dp"
+                        android:text="Дата отъезда"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/fragment_route_info_tv_toCity"
+                        android:layout_marginTop="8dp"
+                        android:text="Дата прибытия"
+                        android:textSize="12sp"/>
+
+                    <TextView
                         android:id="@+id/textView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Departure"/>
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="Город отъезда"
+                        android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/textView5"
@@ -38,145 +81,123 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:text="Arrival"/>
+                        android:text="Город прибытия"
+                        android:textSize="12sp"/>
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/fragment_route_info_tv_toCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_below="@+id/textView5"
+                        android:layout_marginTop="2dp"
                         android:text="city"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="15sp"
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/textView19"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_toEndOf="@+id/textView16"
-                        android:layout_toRightOf="@+id/textView16"
-                        android:text="0"/>
-
-                    <TextView
-                        android:id="@+id/textView15"
+                        android:textColor="@color/colorPrimaryText"
+                        android:id="@+id/fragment_route_info_tv_fromDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@+id/textView9"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/textView10"
+                        android:gravity="left"
+                        android:maxLines="1"
                         android:text="date"/>
 
                     <TextView
-                        android:id="@+id/textView16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView26"
-                        android:text="Price: "/>
-
-                    <TextView
-                        android:id="@+id/textView14"
+                        android:textColor="@color/colorPrimaryText"
+                        android:id="@+id/fragment_route_info_tv_toDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@+id/textView15"
-                        android:text="time"/>
-
-                    <TextView
-                        android:id="@+id/textView26"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView25"
-                        android:text="time"/>
-
-                    <TextView
-                        android:id="@+id/textView25"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView9"
+                        android:layout_below="@+id/textView7"
+                        android:gravity="right"
+                        android:maxLines="1"
                         android:text="date"/>
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/fragment_route_info_tv_fromCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/textView6"
+                        android:layout_marginTop="2dp"
                         android:text="city"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="15sp"
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/textView9"
+                        android:layout_marginTop="8dp"
+                        android:id="@+id/textView16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:text="Цена: "
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_below="@+id/fragment_route_info_tv_fromDate"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView4"
-                        android:gravity="center"
-                        android:text="Date and time"/>
+                        android:layout_alignParentStart="true"/>
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/fragment_route_info_tv_price"
+                        android:layout_alignBottom="@+id/fragment_route_info_tv_price"
+                        android:layout_toEndOf="@+id/fragment_route_info_tv_price"
+                        android:layout_toRightOf="@+id/fragment_route_info_tv_price"
+                        android:text=" грн."
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <TextView
+                        android:id="@+id/fragment_route_info_tv_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/textView16"
+                        android:layout_alignBottom="@+id/textView16"
+                        android:layout_toEndOf="@+id/textView16"
+                        android:layout_toRightOf="@+id/textView16"
+                        android:text="0"
+                        android:textColor="@color/colorPrimaryDark"/>
+
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <TextView
+                android:id="@+id/textView201"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@android:color/white"
-                app:cardElevation="2dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:id="@+id/textView21"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/textView201"
-                        android:text="toInfo"/>
-
-                    <TextView
-                        android:id="@+id/textView24"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView201"
-                        android:text="fromInfo"/>
-
-                    <TextView
-                        android:id="@+id/textView201"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center"
-                        android:text="Info"/>
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="Дополнительно"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"/>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@android:color/white"
-                app:cardElevation="2dp">
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -184,20 +205,15 @@
                     android:padding="8dp">
 
                     <TextView
-                        android:id="@+id/textView20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Info"/>
-
-                    <TextView
-                        android:id="@+id/textView22"
+                        android:textColor="@color/colorPrimaryText"
+                        android:id="@+id/fragment_route_info_tv_reservationCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@+id/textView28"
                         android:layout_alignBottom="@+id/textView28"
                         android:layout_toEndOf="@+id/textView28"
                         android:layout_toRightOf="@+id/textView28"
-                        android:text="-"/>
+                        android:text="0"/>
 
                     <TextView
                         android:id="@+id/textView28"
@@ -205,11 +221,12 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView23"
-                        android:text="Reservation Count: "/>
+                        android:layout_below="@+id/fragment_route_info_tv_busId"
+                        android:text="Зарезирвировано мест: "/>
 
                     <TextView
-                        android:id="@+id/textView23"
+                        android:textColor="@color/colorPrimaryText"
+                        android:id="@+id/fragment_route_info_tv_busId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@+id/textView27"
@@ -224,8 +241,92 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView20"
-                        android:text="Bus Id: "/>
+                        android:text="Автобус: "/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/fragment_route_info_tv_reservationCount"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="8dp"
+                            android:text="Полный путь"
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:textColor="@color/colorPrimaryText"
+                            android:id="@+id/fragment_route_info_tv_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/textView28"
+                            android:text="Info"/>
+
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="8dp"
+                            android:text="Откуда выезжаем"
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:textColor="@color/colorPrimaryText"
+                            android:id="@+id/fragment_route_info_tv_fromInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/textView"
+                            android:text="fromInfo"/>
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/fragment_route_info_tv_info"
+                            android:layout_marginTop="8dp"
+                            android:text="Куда приедем"
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:textColor="@color/colorPrimaryText"
+                            android:id="@+id/fragment_route_info_tv_toInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/textView3"
+                            android:text="toInfo"/>
+                    </LinearLayout>
+
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 

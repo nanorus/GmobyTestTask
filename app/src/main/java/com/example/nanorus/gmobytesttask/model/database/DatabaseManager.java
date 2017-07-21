@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.nanorus.gmobytesttask.app.App;
+import com.example.nanorus.gmobytesttask.model.DataConverter;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.FromCityPojo;
@@ -30,30 +31,30 @@ public class DatabaseManager {
     }
 
     // define names of tables and columns
-    final static String TABLE_NAME_ROUTES = DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES;
-    final static String TABLE_NAME_FROM_CITY = DatabaseContract.DatabaseEntry.TABLE_NAME_FROM_CITY;
-    final static String TABLE_NAME_TO_CITY = DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY;
+    private final static String TABLE_NAME_ROUTES = DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES;
+    private final static String TABLE_NAME_FROM_CITY = DatabaseContract.DatabaseEntry.TABLE_NAME_FROM_CITY;
+    private final static String TABLE_NAME_TO_CITY = DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY;
 
-    final static String COLUMN_NAME_ROUTES_ID = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_ID;
-    final static String COLUMN_NAME_ROUTES_FROM_DATE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_DATE;
-    final static String COLUMN_NAME_ROUTES_TO_DATE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_DATE;
-    final static String COLUMN_NAME_ROUTES_FROM_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_INFO;
-    final static String COLUMN_NAME_ROUTES_TO_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_INFO;
-    final static String COLUMN_NAME_ROUTES_FROM_CITY = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_CITY;
-    final static String COLUMN_NAME_ROUTES_TO_CITY = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_CITY;
-    final static String COLUMN_NAME_ROUTES_PRICE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_PRICE;
-    final static String COLUMN_NAME_ROUTES_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_INFO;
-    final static String COLUMN_NAME_ROUTES_BUS_ID = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_BUS_ID;
-    final static String COLUMN_NAME_ROUTES_RESERVATION_COUNT = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_RESERVATION_COUNT;
+    private final static String COLUMN_NAME_ROUTES_ID = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_ID;
+    private final static String COLUMN_NAME_ROUTES_FROM_DATE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_DATE;
+    private final static String COLUMN_NAME_ROUTES_TO_DATE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_DATE;
+    private final static String COLUMN_NAME_ROUTES_FROM_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_INFO;
+    private final static String COLUMN_NAME_ROUTES_TO_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_INFO;
+    private final static String COLUMN_NAME_ROUTES_FROM_CITY = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_CITY;
+    private final static String COLUMN_NAME_ROUTES_TO_CITY = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_CITY;
+    private final static String COLUMN_NAME_ROUTES_PRICE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_PRICE;
+    private final static String COLUMN_NAME_ROUTES_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_INFO;
+    private final static String COLUMN_NAME_ROUTES_BUS_ID = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_BUS_ID;
+    private final static String COLUMN_NAME_ROUTES_RESERVATION_COUNT = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_RESERVATION_COUNT;
 
-    final static String COLUMN_NAME_FROM_CITY_NAME = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_NAME;
-    final static String COLUMN_NAME_FROM_CITY_ID = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_ID;
-    final static String COLUMN_NAME_TO_CITY_NAME = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_NAME;
-    final static String COLUMN_NAME_FROM_CITY_HIGHLIGHT = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_HIGHLIGHT;
-    final static String COLUMN_NAME_TO_CITY_ID = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_ID;
-    final static String COLUMN_NAME_TO_CITY_HIGHLIGHT = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_HIGHLIGHT;
+    private final static String COLUMN_NAME_FROM_CITY_NAME = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_NAME;
+    private final static String COLUMN_NAME_FROM_CITY_ID = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_ID;
+    private final static String COLUMN_NAME_TO_CITY_NAME = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_NAME;
+    private final static String COLUMN_NAME_FROM_CITY_HIGHLIGHT = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_HIGHLIGHT;
+    private final static String COLUMN_NAME_TO_CITY_ID = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_ID;
+    private final static String COLUMN_NAME_TO_CITY_HIGHLIGHT = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_HIGHLIGHT;
 
-    final static String COMMA_SEP = ",";
+    private final static String COMMA_SEP = ",";
 
     public static void putRoutes(RequestPojo routesFullInfo) {
         try {
@@ -160,8 +161,8 @@ public class DatabaseManager {
                                     cursor.getInt(cursor.getColumnIndex("Id")),
                                     cursor.getString(cursor.getColumnIndex("FromCity")),
                                     cursor.getString(cursor.getColumnIndex("ToCity")),
-                                    cursor.getString(cursor.getColumnIndex("FromDate")),
-                                    cursor.getString(cursor.getColumnIndex("ToDate")),
+                                    DataConverter.convertApiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("FromDate"))),
+                                    DataConverter.convertApiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("ToDate"))),
                                     cursor.getInt(cursor.getColumnIndex("Price"))
                             ));
                         }

@@ -31,10 +31,9 @@ public class RoutesActivityPresenter implements IRoutesActivityPresenter {
     public void onRefresh() {
         if (InternetConnection.isOnline()) {
             EventBus.getInstance().post(new UpdateRoutesListEvent());
-            EventBus.getInstance().post(new UpdateRoutesListEvent());
         } else {
-            mView.showSnackBarNoInternet();
             mView.stopShowRefreshing();
+            mView.showAlertNoInternet();
         }
     }
 

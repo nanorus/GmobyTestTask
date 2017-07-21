@@ -7,7 +7,7 @@ public interface IRoutesActivity {
 
     void stopShowRefreshing();
 
-    void showSnackBarNoInternet();
+    void showAlertNoInternet();
 
     IRoutesActivity getView();
 
