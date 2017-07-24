@@ -12,8 +12,6 @@ public interface IRoutesActivity {
 
     void showAlertNoInternet();
 
-    boolean getIsOnlineLoading();
-
     IRoutesActivity getView();
 
 }

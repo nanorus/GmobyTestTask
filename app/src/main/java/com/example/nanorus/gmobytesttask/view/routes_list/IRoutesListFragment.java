@@ -28,9 +28,6 @@ public interface IRoutesListFragment {
 
     void hideAlert();
 
-    void setIsOnlineLoading(boolean answer);
-
-
     int getListItemsCount();
 
     boolean isAdapterCreated();

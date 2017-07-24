@@ -46,10 +46,6 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
         void hideAlert();
 
-        void setIsOnlineLoading(boolean answer);
-
-        boolean getIsOnlineLoading();
-
     }
 
     @Override
@@ -70,8 +66,9 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
     @Override
     public void onStop() {
-        super.onStop();
+        System.out.println("fragment: onStop()");
         mPresenter.releasePresenter();
+        super.onStop();
     }
 
     @Override
@@ -89,6 +86,14 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onStart() {
+        mPresenter = new RoutesListFragmentPresenter(
+                getViewLayer()
+        );
+        super.onStart();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -98,10 +103,6 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
         fragment_routes_list_tv_no_data = (TextView) v.findViewById(R.id.fragment_routes_list_tv_no_data);
         hideNoDataText();
 
-        mPresenter = new RoutesListFragmentPresenter(
-                getViewLayer(),
-                mRoutesListEventListener.getIsOnlineLoading()
-        );
 
         RecyclerViewItemClickSupport.addTo(fragment_routes_list_rv_list).setOnItemClickListener((recyclerView, position, v1) -> {
             mListItemClickedPosition = position;
@@ -184,10 +185,6 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
         mRoutesListEventListener.hideAlert();
     }
 
-    @Override
-    public void setIsOnlineLoading(boolean answer) {
-        mRoutesListEventListener.setIsOnlineLoading(answer);
-    }
 
     @Override
     public int getListItemsCount() {

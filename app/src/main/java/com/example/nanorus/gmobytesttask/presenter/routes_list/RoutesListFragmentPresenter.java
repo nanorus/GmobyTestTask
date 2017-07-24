@@ -38,21 +38,15 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     InputIntoDBThread mUpdateOnlineDbInputThread;
     RequestPojo[] request;
 
-    public RoutesListFragmentPresenter(IRoutesListFragment view, boolean isOnlineLoading) {
+    public RoutesListFragmentPresenter(IRoutesListFragment view) {
         mView = view;
         mView.createAndSetAdapter();
         System.out.println("Создан новый презентер");
         EventBus.getInstance().register(this);
 
-        if (isOnlineLoading) {
-            System.out.println("presetner constructor: online loading");
-
-            EventBus.getInstance().post(new UpdateRoutesListOnlineEvent());
+        if (PreferencesManager.getIsIntoDBInserting()) {
+            mView.showAlertInsert();
         } else {
-            System.out.println("presetner constructor: offline loading");
-            if (PreferencesManager.getIsIntoDBInserting()) {
-                mView.showAlertInsert();
-            }
             updateListOffline();
         }
     }
@@ -65,7 +59,6 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
             updateListOnlineSubscription.unsubscribe();
         }
 
-        mView.setIsOnlineLoading(true);
         System.out.println("presenter: updateListOnline()");
 
         mView.showAlertLoading();
@@ -82,7 +75,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                         System.out.println("presenter: online: subscription: onNext()");
                         System.out.println("online: add all to list");
                         routeMainInfoPojos.addAll(DataConverter.convertFullRoutesListToMainInfoRouteList(requestPojo.getData()));
-                    //    mView.updateAdapter(routeMainInfoPojos);
+                        //    mView.updateAdapter(routeMainInfoPojos);
                         request[0] = requestPojo;
                     } catch (NullPointerException e) {
                         e.printStackTrace();
@@ -119,7 +112,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     @Override
     public void updateListOffline() {
         System.out.println("presenter: updateListOffline()");
-        if (PreferencesManager.getIsIntoDBInserting()){
+        if (PreferencesManager.getIsIntoDBInserting()) {
             System.out.println("presenter: updateListOffline canceled (db insert being)");
         } else {
             EventBus.getInstance().post(new RoutesListShowAlertEvent("Открытие", true));
@@ -170,8 +163,12 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     @Override
     public void onListItemClicked() {
-        int clickedRouteId = mView.getDataByListPosition(mView.getListItemClickedPosition()).getId();
-        Router.navigateToRouteInfoActivity(mView.getViewContext(), clickedRouteId);
+        try {
+            int clickedRouteId = mView.getDataByListPosition(mView.getListItemClickedPosition()).getId();
+            Router.navigateToRouteInfoActivity(mView.getViewContext(), clickedRouteId);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     @Subscribe
@@ -180,7 +177,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     }
 
     @Subscribe
-    public void updateListOfflineListener(UpdateRoutesListOfflineEvent event){
+    public void updateListOfflineListener(UpdateRoutesListOfflineEvent event) {
         updateListOffline();
     }
 
@@ -189,7 +186,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
         Completable.create(completableSubscriber -> {
             System.out.println("into db (new thread): putting into db");
-            if(!PreferencesManager.getIsIntoDBInserting()) {
+            if (!PreferencesManager.getIsIntoDBInserting()) {
                 PreferencesManager.setIsIntoDBInserting(true);
                 DataManager.cleanSavedRoutes(false);
                 DataManager.saveRoutes(request[0], false);

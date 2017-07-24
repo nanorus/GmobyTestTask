@@ -131,15 +131,5 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
 
     }
 
-    @Override
-    public void setIsOnlineLoading(boolean answer) {
-        mIsOnlineLoading = answer;
-    }
-
-
-    @Override
-    public boolean getIsOnlineLoading() {
-        return mIsOnlineLoading;
-    }
 
 }
