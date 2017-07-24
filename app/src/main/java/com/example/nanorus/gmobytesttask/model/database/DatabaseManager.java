@@ -131,6 +131,7 @@ public class DatabaseManager {
     }
 
     public static Observable<RouteMainInfoPojo> getRoutesMainInfo(int fromDate, int toDate) {
+        System.out.println("Вызван метод получения объекта из бд");
         Observable<RouteMainInfoPojo> routesMainInfo = Observable.create(
                 subscriber -> {
                     DatabaseHelper helper = DatabaseManager.getDatabaseHelper();

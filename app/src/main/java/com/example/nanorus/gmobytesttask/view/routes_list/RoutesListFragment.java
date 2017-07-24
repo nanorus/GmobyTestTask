@@ -5,8 +5,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,28 +29,33 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
     RoutesListAdapter mAdapter;
     LinearLayoutManager mManager;
-    ArrayList<RouteMainInfoPojo> mData;
+    List<RouteMainInfoPojo> mData;
 
     RecyclerView fragment_routes_list_rv_list;
     TextView fragment_routes_list_tv_no_data;
-    NestedScrollView fragment_routes_list_nested;
 
     RoutesListEventListener mRoutesListEventListener;
 
     private int mListItemClickedPosition = 0;
 
     public interface RoutesListEventListener {
+
         void showAlertLoadFail(String message);
 
         void showAlert(String message);
 
         void hideAlert();
 
+        void setIsOnlineLoading(boolean answer);
+
+        boolean getIsOnlineLoading();
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         try {
+            System.out.println("fragment: onAttach");
             mRoutesListEventListener = (RoutesListEventListener) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
@@ -61,20 +64,24 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     }
 
     @Override
-    public void onAttach(Context context) {
-        try {
-            mRoutesListEventListener = (RoutesListEventListener) context;
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-        super.onAttach(context);
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.releasePresenter();
     }
 
     @Override
     public void onDetach() {
-        mPresenter.releasePresenter();
-        mPresenter = null;
         super.onDetach();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -90,17 +97,16 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
         fragment_routes_list_rv_list = (RecyclerView) v.findViewById(R.id.fragment_routes_list_rv_list);
         fragment_routes_list_tv_no_data = (TextView) v.findViewById(R.id.fragment_routes_list_tv_no_data);
         hideNoDataText();
-        fragment_routes_list_nested = (NestedScrollView) v.findViewById(R.id.fragment_routes_list_nested);
-        fragment_routes_list_nested.post(() -> fragment_routes_list_nested.scrollTo(0, 0));
 
-        mPresenter = new RoutesListFragmentPresenter(getViewLayer());
+        mPresenter = new RoutesListFragmentPresenter(
+                getViewLayer(),
+                mRoutesListEventListener.getIsOnlineLoading()
+        );
 
         RecyclerViewItemClickSupport.addTo(fragment_routes_list_rv_list).setOnItemClickListener((recyclerView, position, v1) -> {
             mListItemClickedPosition = position;
             mPresenter.onListItemClicked();
         });
-
-        ViewCompat.setNestedScrollingEnabled(fragment_routes_list_rv_list, false);
 
         return v;
     }
@@ -122,15 +128,25 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     @Override
     public void addDataToListAndUpdateAdapter(RouteMainInfoPojo routeMainInfoPojo) {
         mData.add(routeMainInfoPojo);
-        mAdapter.notifyDataSetChanged();
+        // mAdapter.notifyItemInserted(mData.size());
+        // System.out.println(mData.size());
     }
 
 
     @Override
     public void updateAdapter(List<RouteMainInfoPojo> newData) {
-        mData.clear();
-        mData.addAll(newData);
+        System.out.println("updated data");
+        //  mData.clear();
+        //  mData.addAll(newData);
+        //    if (newData.size() == (mData.size() + 1)) {
+        //     mAdapter.notifyItemInserted(newData.size() - 1);
+        //      System.out.println("data added");
+        //    } else {
+
         mAdapter.notifyDataSetChanged();
+        //      System.out.println("data changed");
+        //   }
+
     }
 
     @Override
@@ -169,8 +185,21 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     }
 
     @Override
+    public void setIsOnlineLoading(boolean answer) {
+        mRoutesListEventListener.setIsOnlineLoading(answer);
+    }
+
+    @Override
     public int getListItemsCount() {
         return mData.size();
+    }
+
+    @Override
+    public boolean isAdapterCreated() {
+        if (mAdapter != null && mManager != null)
+            return true;
+        else
+            return false;
     }
 
     @Override

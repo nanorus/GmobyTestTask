@@ -1,6 +1,7 @@
 package com.example.nanorus.gmobytesttask.app.bus;
 
 import com.squareup.otto.Bus;
+import com.squareup.otto.ThreadEnforcer;
 
 public class EventBus {
 
@@ -8,7 +9,7 @@ public class EventBus {
 
     public static Bus getInstance() {
         if (sInstance == null)
-            sInstance = new Bus();
+            sInstance = new Bus(ThreadEnforcer.ANY);
         return sInstance;
     }
 

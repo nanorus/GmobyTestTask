@@ -28,6 +28,7 @@ public class RoutesListAdapter extends RecyclerView.Adapter<RoutesListAdapter.Ro
 
     @Override
     public void onBindViewHolder(RoutesListViewHolder holder, int position) {
+     //   System.out.println("onBindViewHolder");
         holder.routes_list_item_tv_fromCity.setText(mData.get(position).getFromCityName());
         holder.routes_list_item_tv_toCity.setText(mData.get(position).getToCityName());
         holder.routes_list_item_tv_fromDate.setText(mData.get(position).getFromDate());

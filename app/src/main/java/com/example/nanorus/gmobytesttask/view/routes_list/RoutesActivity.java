@@ -18,17 +18,39 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
     AlertDialog simpleAlert;
 
 
+    private boolean mIsOnlineLoading = false;
+    private static final String KEY_IS_ONLINE_LOADING = "IS_ONLINE_LOADING";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
 
+        activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
+
+        if (savedInstanceState != null) {
+            mIsOnlineLoading = savedInstanceState.getBoolean(KEY_IS_ONLINE_LOADING);
+            if (mIsOnlineLoading) {
+                //  showAlert("Загрузка данных..");
+                //    activity_routes_swipe.setEnabled(false);
+            } else {
+                //     activity_routes_swipe.setEnabled(true);
+            }
+
+        }
+
         mPresenter = new RoutesActivityPresenter(getView());
         EventBus.getInstance().register(this);
 
-        activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
         activity_routes_swipe.setOnRefreshListener(() -> mPresenter.onRefresh());
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(KEY_IS_ONLINE_LOADING, mIsOnlineLoading);
     }
 
     @Override
@@ -41,6 +63,7 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
     public void stopShowRefreshing() {
         if (activity_routes_swipe.isRefreshing())
             activity_routes_swipe.setRefreshing(false);
+        activity_routes_swipe.setEnabled(true);
     }
 
     @Override
@@ -52,7 +75,6 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
                 .show();
     }
 
-
     @Override
     public IRoutesActivity getView() {
         return this;
@@ -60,8 +82,8 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
 
     @Override
     protected void onPause() {
-        if (simpleAlert != null & simpleAlert.isShowing())
-            simpleAlert.dismiss();
+        hideAlert();
+        simpleAlert = null;
         super.onPause();
     }
 
@@ -69,40 +91,55 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
     protected void onDestroy() {
         mPresenter.releasePresenter();
         mPresenter = null;
+        hideAlert();
         super.onDestroy();
     }
 
 
     @Override
     public void showAlertLoadFail(String message) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
                 .setPositiveButton(R.string.alert_button_retry, (dialogInterface, i) -> mPresenter.onRefresh())
                 .setOnDismissListener(DialogInterface::dismiss)
                 .show();
+
     }
 
     @Override
     public void showAlert(String message) {
-        if (simpleAlert != null) {
-            if (simpleAlert.isShowing()) {
-                simpleAlert.setMessage(message);
-            } else {
-                simpleAlert.setMessage(message);
-                simpleAlert.show();
-            }
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            simpleAlert = builder.setMessage(message)
-                    .setCancelable(false)
-                    .show();
-        }
+
+        hideAlert();
+        simpleAlert = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        simpleAlert = builder.setMessage(message)
+                .setCancelable(false)
+                .show();
     }
 
     @Override
     public void hideAlert() {
-        if (simpleAlert != null) {
-            simpleAlert.dismiss();
+
+        try {
+            if (!this.isFinishing() && simpleAlert != null && simpleAlert.isShowing()) {
+                simpleAlert.dismiss();
+            }
+        } catch (java.lang.IllegalArgumentException e) {
+
         }
+
     }
+
+    @Override
+    public void setIsOnlineLoading(boolean answer) {
+        mIsOnlineLoading = answer;
+    }
+
+
+    @Override
+    public boolean getIsOnlineLoading() {
+        return mIsOnlineLoading;
+    }
+
 }
