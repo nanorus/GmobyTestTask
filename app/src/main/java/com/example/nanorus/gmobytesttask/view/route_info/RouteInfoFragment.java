@@ -100,7 +100,6 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
     @Override
     public void setToDateField(String text) {
         if (text != null)
-            System.out.println("setToDate text: " + text);
             fragment_route_info_tv_toDate.setText(text);
     }
 

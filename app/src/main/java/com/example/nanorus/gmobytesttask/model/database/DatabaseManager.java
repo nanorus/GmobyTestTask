@@ -131,12 +131,10 @@ public class DatabaseManager {
     }
 
     public static Observable<RouteMainInfoPojo> getRoutesMainInfo(int fromDate, int toDate) {
-        System.out.println("Вызван метод получения объекта из бд");
         Observable<RouteMainInfoPojo> routesMainInfo = Observable.create(
                 subscriber -> {
                     DatabaseHelper helper = DatabaseManager.getDatabaseHelper();
                     SQLiteDatabase database = helper.getReadableDatabase();
-
 
                     Cursor cursor = database.rawQuery("SELECT " +
                                     COLUMN_NAME_ROUTES_ID + " AS Id" + COMMA_SEP +
@@ -158,14 +156,15 @@ public class DatabaseManager {
                             , null);
                     if (cursor.moveToFirst()) {
                         do {
-                            subscriber.onNext(new RouteMainInfoPojo(
+                        RouteMainInfoPojo routeMainInfoPojo =   new RouteMainInfoPojo(
                                     cursor.getInt(cursor.getColumnIndex("Id")),
                                     cursor.getString(cursor.getColumnIndex("FromCity")),
                                     cursor.getString(cursor.getColumnIndex("ToCity")),
                                     DataConverter.convertApiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("FromDate"))),
                                     DataConverter.convertApiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("ToDate"))),
                                     cursor.getInt(cursor.getColumnIndex("Price"))
-                            ));
+                            );
+                            subscriber.onNext(routeMainInfoPojo);
                         }
                         while (cursor.moveToNext());
                     }

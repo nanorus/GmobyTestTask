@@ -1,14 +1,19 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
+import com.example.nanorus.gmobytesttask.R;
+import com.example.nanorus.gmobytesttask.app.App;
 import com.example.nanorus.gmobytesttask.app.Router;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
-import com.example.nanorus.gmobytesttask.app.bus.event.RoutesListShowAlertEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.ShowRefreshingEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.UpdateRoutesListOfflineEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.UpdateRoutesListOnlineEvent;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListSetIsCachingEvent;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListSetIsOnlineLoadingEvent;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListShowAlertEvent;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListShowAlertRetryOnlineLoading;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListShowNoDataEvent;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListShowRefreshingEvent;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListUpdateOfflineEvent;
+import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListUpdateOnlineEvent;
 import com.example.nanorus.gmobytesttask.model.DataConverter;
 import com.example.nanorus.gmobytesttask.model.DataManager;
-import com.example.nanorus.gmobytesttask.model.PreferencesManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
 import com.example.nanorus.gmobytesttask.utils.InternetConnection;
@@ -35,20 +40,23 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     private int mFromDate = 20140101;
     private int mToDate = 20180501;
 
-    InputIntoDBThread mUpdateOnlineDbInputThread;
     RequestPojo[] request;
 
     public RoutesListFragmentPresenter(IRoutesListFragment view) {
+
         mView = view;
         mView.createAndSetAdapter();
-        System.out.println("Создан новый презентер");
         EventBus.getInstance().register(this);
 
-        if (PreferencesManager.getIsIntoDBInserting()) {
+        if (mView.isOnlineLoading()) {
+            mView.showAlertLoading();
+        } else if (mView.isCaching()) {
             mView.showAlertInsert();
         } else {
             updateListOffline();
         }
+
+
     }
 
 
@@ -59,7 +67,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
             updateListOnlineSubscription.unsubscribe();
         }
 
-        System.out.println("presenter: updateListOnline()");
+        EventBus.getInstance().post(new RoutesListSetIsOnlineLoadingEvent(true));
 
         mView.showAlertLoading();
         ArrayList<RouteMainInfoPojo> routeMainInfoPojos = new ArrayList<>();
@@ -72,38 +80,30 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
         updateListOnlineSubscription = requestPojoObservable.subscribe(
                 requestPojo -> {
                     try {
-                        System.out.println("presenter: online: subscription: onNext()");
-                        System.out.println("online: add all to list");
                         routeMainInfoPojos.addAll(DataConverter.convertFullRoutesListToMainInfoRouteList(requestPojo.getData()));
-                        //    mView.updateAdapter(routeMainInfoPojos);
                         request[0] = requestPojo;
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
                 },
 
-                throwable -> System.out.println(throwable.getMessage()),
+                throwable -> {
+                    throwable.printStackTrace();
+                    EventBus.getInstance().post(new RoutesListShowAlertEvent(null, false));
+                    EventBus.getInstance().post(new RoutesListSetIsOnlineLoadingEvent(false));
+                    EventBus.getInstance().post(new RoutesListShowAlertRetryOnlineLoading("Загрузка не успешна"));
+                },
 
                 () -> {
-                    System.out.println("presenter: online: subscription: onCompleted()");
-                    //     mView.hideAlert();
+                    EventBus.getInstance().post(new RoutesListSetIsOnlineLoadingEvent(false));
                     if (request[0].isSuccess()) {
                         if (request[0].getData().size() == 0)
-                            mView.showNoDataText();
+                            EventBus.getInstance().post(new RoutesListShowNoDataEvent(true));
                         else
-                            mView.hideNoDataText();
-/*
-                        if (mUpdateOnlineDbInputThread != null && mUpdateOnlineDbInputThread.isAlive())
-                            mUpdateOnlineDbInputThread.interrupt();
-*/
-
-                        System.out.println("presenter: online: subscription: onCompleted: начинаем запись в бд");
+                            EventBus.getInstance().post(new RoutesListShowNoDataEvent(false));
                         saveToDatabase();
-
-                        EventBus.getInstance().post(new ShowRefreshingEvent(false));
-                        mView.showAlertInsert();
                     } else {
-                        mView.showAlertServerError();
+                        EventBus.getInstance().post(new RoutesListShowAlertEvent(App.getApp().getString(R.string.server_error), true));
                     }
                 }
         );
@@ -111,27 +111,20 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     @Override
     public void updateListOffline() {
-        System.out.println("presenter: updateListOffline()");
-        if (PreferencesManager.getIsIntoDBInserting()) {
-            System.out.println("presenter: updateListOffline canceled (db insert being)");
+        if (mView.isCaching()) {
         } else {
             EventBus.getInstance().post(new RoutesListShowAlertEvent("Открытие", true));
             routeMainInfoPojoObservable = DataManager.loadRoutesMainInfoOffline(mFromDate, mToDate)
-            // .subscribeOn(Schedulers.io())
-            // .observeOn(AndroidSchedulers.mainThread())
+                    .onBackpressureBuffer()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
             ;
             updateListOfflineSubscription = routeMainInfoPojoObservable.subscribe(
-                    routeMainInfoPojo -> {
-                        //  System.out.println("presenter: offline: subscr: next");
-                        mView.addDataToListAndUpdateAdapter(routeMainInfoPojo);
-                    },
-                    throwable -> System.out.println(throwable.getMessage()),
+                    routeMainInfoPojo -> mView.addDataToListAndUpdateAdapter(routeMainInfoPojo),
+                    Throwable::printStackTrace,
                     () -> {
-                        mView.updateAdapter(null);
-                        System.out.println("presenter: offline: subscr: completed");
                         if (mView.getListItemsCount() == 0) {
                             if (InternetConnection.isOnline()) {
-                                System.out.println("presenter: offline: subscr: empty list. now online loading");
                                 updateListOnline();
                             } else {
                                 mView.showAlertNoInternet();
@@ -140,22 +133,15 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                     }
             );
             EventBus.getInstance().post(new RoutesListShowAlertEvent(null, false));
+            EventBus.getInstance().post(new RoutesListShowRefreshingEvent(false));
         }
     }
 
     @Override
     public void releasePresenter() {
-        System.out.println("presenter: releasePresenter");
         EventBus.getInstance().unregister(this);
-
-        if (updateListOnlineSubscription != null && !updateListOnlineSubscription.isUnsubscribed())
-            updateListOnlineSubscription.unsubscribe();
         if (updateListOfflineSubscription != null && !updateListOfflineSubscription.isUnsubscribed())
             updateListOfflineSubscription.unsubscribe();
-
-        if (mUpdateOnlineDbInputThread != null && mUpdateOnlineDbInputThread.isAlive())
-            mUpdateOnlineDbInputThread.interrupt();
-
 
         mView = null;
 
@@ -172,57 +158,53 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     }
 
     @Subscribe
-    public void updateListOnlineListener(UpdateRoutesListOnlineEvent event) {
+    public void updateListOnlineListener(RoutesListUpdateOnlineEvent event) {
         updateListOnline();
     }
 
     @Subscribe
-    public void updateListOfflineListener(UpdateRoutesListOfflineEvent event) {
+    public void updateListOfflineListener(RoutesListUpdateOfflineEvent event) {
         updateListOffline();
     }
 
     private void saveToDatabase() {
-        EventBus.getInstance().post(new RoutesListShowAlertEvent("Сохранение данных", true));
+            EventBus.getInstance().post(new RoutesListShowAlertEvent("Сохранение данных", true));
 
-        Completable.create(completableSubscriber -> {
-            System.out.println("into db (new thread): putting into db");
-            if (!PreferencesManager.getIsIntoDBInserting()) {
-                PreferencesManager.setIsIntoDBInserting(true);
+            Completable.create(completableSubscriber -> {
+                EventBus.getInstance().post(new RoutesListSetIsCachingEvent(true));
+
                 DataManager.cleanSavedRoutes(false);
-                DataManager.saveRoutes(request[0], false);
-                PreferencesManager.setIsIntoDBInserting(false);
-                System.out.println("into db (new thread): putting completed");
+                DataManager.saveRoutes(request[0]);
+
+                EventBus.getInstance().post(new RoutesListSetIsCachingEvent(false));
                 completableSubscriber.onCompleted();
-            } else {
-                completableSubscriber.onError(new Throwable("The insert to the database is already being"));
-            }
-        })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> {
-                            System.out.println("into db (main thread): putting completed");
-                            EventBus.getInstance().post(new RoutesListShowAlertEvent(null, false));
-                            EventBus.getInstance().post(new UpdateRoutesListOfflineEvent());
-                        },
-                        throwable -> throwable.printStackTrace()
-                );
-           /* if (mView != null) {
-                mView.hideAlert();
-                mView.setIsOnlineLoading(false);
-            }*/
-        /*
-        mUpdateOnlineDbInputThread = new InputIntoDBThread();
-        mUpdateOnlineDbInputThread.start();
-        */
+            })
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> {
+                                EventBus.getInstance().post(new RoutesListShowAlertEvent(null, false));
+                                EventBus.getInstance().post(new RoutesListUpdateOfflineEvent());
+                            },
+                            Throwable::printStackTrace
+                    );
     }
 
-    public class InputIntoDBThread extends Thread {
-        @Override
-        public void run() {
-
-            super.run();
-        }
+    @Subscribe
+    public void setIsCashingListener(RoutesListSetIsCachingEvent event) {
+        mView.setIsCaching(event.isCaching());
     }
 
+    @Subscribe
+    public void setIsOnlineLoadingListener(RoutesListSetIsOnlineLoadingEvent event) {
+        mView.setIsOnlineLoading(event.isOnlineLoading());
+    }
+
+    @Subscribe
+    public void showNoDataListener(RoutesListShowNoDataEvent event) {
+        if (event.isWillShown())
+            mView.showNoDataText();
+        else
+            mView.hideNoDataText();
+    }
 }

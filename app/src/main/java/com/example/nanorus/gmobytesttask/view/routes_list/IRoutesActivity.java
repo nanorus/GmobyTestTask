@@ -10,7 +10,7 @@ public interface IRoutesActivity {
 
     void stopShowRefreshing();
 
-    void showAlertNoInternet();
+    void showAlertRetryOnlineLoading(String message);
 
     IRoutesActivity getView();
 

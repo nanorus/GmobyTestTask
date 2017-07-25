@@ -18,29 +18,25 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
     AlertDialog simpleAlert;
 
 
-    private boolean mIsOnlineLoading = false;
+    public static boolean mIsOnlineLoading = false;
+    public static boolean mIsCaching = false;
     private static final String KEY_IS_ONLINE_LOADING = "IS_ONLINE_LOADING";
+    private static final String KEY_IS_CACHING = "IS_CACHING";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
+        EventBus.getInstance().register(this);
 
         activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
 
         if (savedInstanceState != null) {
             mIsOnlineLoading = savedInstanceState.getBoolean(KEY_IS_ONLINE_LOADING);
-            if (mIsOnlineLoading) {
-                //  showAlert("Загрузка данных..");
-                //    activity_routes_swipe.setEnabled(false);
-            } else {
-                //     activity_routes_swipe.setEnabled(true);
-            }
-
+            mIsCaching = savedInstanceState.getBoolean(KEY_IS_CACHING);
         }
 
         mPresenter = new RoutesActivityPresenter(getView());
-        EventBus.getInstance().register(this);
 
         activity_routes_swipe.setOnRefreshListener(() -> mPresenter.onRefresh());
 
@@ -49,8 +45,8 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putBoolean(KEY_IS_ONLINE_LOADING, mIsOnlineLoading);
+        outState.putBoolean(KEY_IS_CACHING, mIsCaching);
     }
 
     @Override
@@ -66,10 +62,9 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
         activity_routes_swipe.setEnabled(true);
     }
 
-    @Override
-    public void showAlertNoInternet() {
+    public void showAlertRetryOnlineLoading(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(this.getString(R.string.no_internet))
+        builder.setMessage(message)
                 .setPositiveButton(R.string.alert_button_retry, (dialogInterface, i) -> mPresenter.onRefresh())
                 .setOnDismissListener(DialogInterface::dismiss)
                 .show();
@@ -129,6 +124,26 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
 
         }
 
+    }
+
+    @Override
+    public  boolean isCaching() {
+        return mIsCaching;
+    }
+
+    @Override
+    public boolean isOnlineLoading() {
+        return mIsOnlineLoading;
+    }
+
+    @Override
+    public void setIsCaching(boolean isCaching) {
+        mIsCaching = isCaching;
+    }
+
+    @Override
+    public void setIsOnlineLoading(boolean isOnlineLoading) {
+        mIsOnlineLoading = isOnlineLoading;
     }
 
 

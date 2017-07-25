@@ -6,8 +6,8 @@ public interface IRoutesListFragmentPresenter {
 
     void updateListOffline();
 
-    void releasePresenter();
-
     void onListItemClicked();
+
+    void releasePresenter();
 
 }

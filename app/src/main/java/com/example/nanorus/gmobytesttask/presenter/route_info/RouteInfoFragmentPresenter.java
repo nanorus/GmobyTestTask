@@ -25,7 +25,6 @@ public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
         getRouteFullInfoSubscription = datumPojoObservable.subscribe(
                 datumPojo -> {
                     // call mView showing methods
-                    System.out.println(datumPojo.toString());
                     mView.setFromCityField(datumPojo.getFromCity().getName());
                     mView.setFromDateField(DataConverter.convertApiDateFormatToCorrectDateFormat(
                             datumPojo.getFromDate() + " " + datumPojo.getFromTime()));

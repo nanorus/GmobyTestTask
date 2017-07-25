@@ -1,10 +1,10 @@
-package com.example.nanorus.gmobytesttask.app.bus.event;
+package com.example.nanorus.gmobytesttask.app.bus.event.routes_list;
 
-public class ShowRefreshingEvent {
+public class RoutesListShowRefreshingEvent {
 
    private boolean isShowRefresh = false;
 
-    public ShowRefreshingEvent(boolean isShowRefresh) {
+    public RoutesListShowRefreshingEvent(boolean isShowRefresh) {
         this.isShowRefresh = isShowRefresh;
     }
 

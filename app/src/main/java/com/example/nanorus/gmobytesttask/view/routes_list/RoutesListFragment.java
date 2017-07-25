@@ -46,12 +46,19 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
         void hideAlert();
 
+        boolean isCaching();
+
+        boolean isOnlineLoading();
+
+        void setIsCaching(boolean isCaching);
+
+        void setIsOnlineLoading(boolean isOnlineLoading);
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         try {
-            System.out.println("fragment: onAttach");
             mRoutesListEventListener = (RoutesListEventListener) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
@@ -66,7 +73,6 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
     @Override
     public void onStop() {
-        System.out.println("fragment: onStop()");
         mPresenter.releasePresenter();
         super.onStop();
     }
@@ -129,25 +135,15 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     @Override
     public void addDataToListAndUpdateAdapter(RouteMainInfoPojo routeMainInfoPojo) {
         mData.add(routeMainInfoPojo);
-        // mAdapter.notifyItemInserted(mData.size());
-        // System.out.println(mData.size());
+        mAdapter.notifyItemInserted(mData.size());
     }
 
 
     @Override
     public void updateAdapter(List<RouteMainInfoPojo> newData) {
-        System.out.println("updated data");
-        //  mData.clear();
-        //  mData.addAll(newData);
-        //    if (newData.size() == (mData.size() + 1)) {
-        //     mAdapter.notifyItemInserted(newData.size() - 1);
-        //      System.out.println("data added");
-        //    } else {
-
+        mData.clear();
+        mData.addAll(newData);
         mAdapter.notifyDataSetChanged();
-        //      System.out.println("data changed");
-        //   }
-
     }
 
     @Override
@@ -197,6 +193,26 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
             return true;
         else
             return false;
+    }
+
+    @Override
+    public boolean isCaching() {
+        return mRoutesListEventListener.isCaching();
+    }
+
+    @Override
+    public boolean isOnlineLoading() {
+        return mRoutesListEventListener.isOnlineLoading();
+    }
+
+    @Override
+    public void setIsCaching(boolean isCaching) {
+        mRoutesListEventListener.setIsCaching(isCaching);
+    }
+
+    @Override
+    public void setIsOnlineLoading(boolean isOnlineLoading) {
+        mRoutesListEventListener.setIsOnlineLoading(isOnlineLoading);
     }
 
     @Override

@@ -32,6 +32,14 @@ public interface IRoutesListFragment {
 
     boolean isAdapterCreated();
 
+    boolean isCaching();
+
+    boolean isOnlineLoading();
+
+    void setIsCaching(boolean isCaching);
+
+    void setIsOnlineLoading(boolean isOnlineLoading);
+
     RouteMainInfoPojo getDataByListPosition(int position);
 
     int getListItemClickedPosition();

@@ -28,16 +28,7 @@ public class DataManager {
         return routeFullInfoPojoObservable;
     }
 
-    public static void saveRoutes(RequestPojo requestPojo, boolean inNewThread) {
-        if (inNewThread) {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    DatabaseManager.putRoutes(requestPojo);
-                }
-            };
-            thread.start();
-        } else
+    public static void saveRoutes(RequestPojo requestPojo) {
             DatabaseManager.putRoutes(requestPojo);
     }
 
