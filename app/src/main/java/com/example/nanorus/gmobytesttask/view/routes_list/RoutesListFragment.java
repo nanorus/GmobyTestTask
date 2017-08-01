@@ -1,21 +1,25 @@
 package com.example.nanorus.gmobytesttask.view.routes_list;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nanorus.gmobytesttask.R;
+import com.example.nanorus.gmobytesttask.presenter_base.BasePresenterFragment;
+import com.example.nanorus.gmobytesttask.presenter_base.PresenterFactory;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmentPresenter;
+import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmentPresenterFactory;
 import com.example.nanorus.gmobytesttask.view.ui.RecyclerViewItemClickSupport;
 import com.example.nanorus.gmobytesttask.view.ui.adapter.RoutesListAdapter;
 
@@ -23,7 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RoutesListFragment extends Fragment implements IRoutesListFragment {
+public class RoutesListFragment extends BasePresenterFragment<RoutesListFragmentPresenter, IRoutesListFragment> implements IRoutesListFragment {
+    private static final String TAG = "RoutesListFragment";
 
     RoutesListFragmentPresenter mPresenter;
 
@@ -46,14 +51,6 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
         void hideAlert();
 
-        boolean isCaching();
-
-        boolean isOnlineLoading();
-
-        void setIsCaching(boolean isCaching);
-
-        void setIsOnlineLoading(boolean isOnlineLoading);
-
     }
 
     @Override
@@ -67,14 +64,48 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated-" + tag());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume-" + tag());
+        Log.d(TAG, "onResume- is_presenter_null:" + String.valueOf(mPresenter == null));
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause-" + tag());
     }
 
     @Override
     public void onStop() {
+        Log.d(TAG, "onStop-" + tag());
+        /*
         mPresenter.releasePresenter();
+        */
         super.onStop();
+    }
+
+    @NonNull
+    @Override
+    protected String tag() {
+        return "sample tag";
+    }
+
+    @NonNull
+    @Override
+    protected PresenterFactory<RoutesListFragmentPresenter> getPresenterFactory() {
+        return new RoutesListFragmentPresenterFactory();
+    }
+
+    @Override
+    protected void onPresenterCreatedOrRestored(@NonNull RoutesListFragmentPresenter presenter) {
+        this.mPresenter = presenter;
     }
 
     @Override
@@ -94,9 +125,16 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
     @Override
     public void onStart() {
+        Log.d(TAG, "onStart-" + tag());
+        // When first created the Fragment, the Presenter will be initialized at this point, but on
+        // a configuration change it wont be ready until onResume
+        Log.d(TAG, "onStart- is_presenter_null:" + String.valueOf(mPresenter == null));
+
+        /*
         mPresenter = new RoutesListFragmentPresenter(
                 getViewLayer()
         );
+        */
         super.onStart();
     }
 
@@ -140,10 +178,15 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
 
 
     @Override
-    public void updateAdapter(List<RouteMainInfoPojo> newData) {
+    public void fullUpdateAdapter(List<RouteMainInfoPojo> newData) {
         mData.clear();
         mData.addAll(newData);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public List<RouteMainInfoPojo> getData() {
+        return mData;
     }
 
     @Override
@@ -185,34 +228,6 @@ public class RoutesListFragment extends Fragment implements IRoutesListFragment 
     @Override
     public int getListItemsCount() {
         return mData.size();
-    }
-
-    @Override
-    public boolean isAdapterCreated() {
-        if (mAdapter != null && mManager != null)
-            return true;
-        else
-            return false;
-    }
-
-    @Override
-    public boolean isCaching() {
-        return mRoutesListEventListener.isCaching();
-    }
-
-    @Override
-    public boolean isOnlineLoading() {
-        return mRoutesListEventListener.isOnlineLoading();
-    }
-
-    @Override
-    public void setIsCaching(boolean isCaching) {
-        mRoutesListEventListener.setIsCaching(isCaching);
-    }
-
-    @Override
-    public void setIsOnlineLoading(boolean isOnlineLoading) {
-        mRoutesListEventListener.setIsOnlineLoading(isOnlineLoading);
     }
 
     @Override

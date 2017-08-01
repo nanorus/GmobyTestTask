@@ -12,7 +12,9 @@ public interface IRoutesListFragment {
 
     void addDataToListAndUpdateAdapter(RouteMainInfoPojo routeMainInfoPojo);
 
-    void updateAdapter(List<RouteMainInfoPojo> routeMainInfoPojos);
+    void fullUpdateAdapter(List<RouteMainInfoPojo> routeMainInfoPojos);
+
+    List<RouteMainInfoPojo> getData();
 
     void showNoDataText();
 
@@ -30,15 +32,6 @@ public interface IRoutesListFragment {
 
     int getListItemsCount();
 
-    boolean isAdapterCreated();
-
-    boolean isCaching();
-
-    boolean isOnlineLoading();
-
-    void setIsCaching(boolean isCaching);
-
-    void setIsOnlineLoading(boolean isOnlineLoading);
 
     RouteMainInfoPojo getDataByListPosition(int position);
 

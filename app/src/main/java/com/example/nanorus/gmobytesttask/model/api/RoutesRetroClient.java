@@ -11,7 +11,7 @@ public class RoutesRetroClient {
     public static Retrofit getInstance() {
         if (sInstance == null) {
             sInstance = new Retrofit.Builder()
-                    .baseUrl("http://smartbus.gmoby.org/web/index.php/api/")
+                    .baseUrl("http://projects.gmoby.org/web/index.php/api/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
