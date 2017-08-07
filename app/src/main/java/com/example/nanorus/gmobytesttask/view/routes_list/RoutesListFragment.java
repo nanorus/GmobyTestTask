@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.presenter_base.BasePresenterFragment;
-import com.example.nanorus.gmobytesttask.presenter_base.PresenterFactory;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
+import com.example.nanorus.gmobytesttask.presenter.base.BasePresenterFragment;
+import com.example.nanorus.gmobytesttask.presenter.base.PresenterFactory;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmentPresenter;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmentPresenterFactory;
 import com.example.nanorus.gmobytesttask.view.ui.RecyclerViewItemClickSupport;
@@ -39,24 +39,36 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     RecyclerView fragment_routes_list_rv_list;
     TextView fragment_routes_list_tv_no_data;
 
-    RoutesListEventListener mRoutesListEventListener;
+    RoutesListEventListener mActivityEventListener;
 
     private int mListItemClickedPosition = 0;
 
-    public interface RoutesListEventListener {
 
-        void showAlertLoadFail(String message);
+    public void updateListOnline() {
+        mPresenter.updateListOnline();
+    }
+
+
+    public void updateListOffline() {
+        mPresenter.updateListOffline();
+    }
+
+    public interface RoutesListEventListener {
 
         void showAlert(String message);
 
         void hideAlert();
+
+        void showAlertRetryOnlineLoading(String message);
+
+        void showSwipeRefreshing(boolean willShow);
 
     }
 
     @Override
     public void onAttach(Activity activity) {
         try {
-            mRoutesListEventListener = (RoutesListEventListener) activity;
+            mActivityEventListener = (RoutesListEventListener) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -125,16 +137,6 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart-" + tag());
-        // When first created the Fragment, the Presenter will be initialized at this point, but on
-        // a configuration change it wont be ready until onResume
-        Log.d(TAG, "onStart- is_presenter_null:" + String.valueOf(mPresenter == null));
-
-        /*
-        mPresenter = new RoutesListFragmentPresenter(
-                getViewLayer()
-        );
-        */
         super.onStart();
     }
 
@@ -201,33 +203,45 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
     @Override
     public void showAlertNoInternet() {
-        mRoutesListEventListener.showAlertLoadFail(this.getString(R.string.no_internet));
+        mActivityEventListener.showAlertRetryOnlineLoading(this.getString(R.string.no_internet));
     }
 
     @Override
-    public void showAlertServerError() {
-        mRoutesListEventListener.showAlertLoadFail(this.getString(R.string.server_error));
+    public void showSwipeRefreshing(boolean willShow) {
+        mActivityEventListener.showSwipeRefreshing(willShow);
     }
+
+
+    @Override
+    public void showAlertRetryOnlineLoading(String message) {
+        mActivityEventListener.showAlertRetryOnlineLoading(message);
+    }
+
 
     @Override
     public void showAlertLoading() {
-        mRoutesListEventListener.showAlert("Загрузка данных");
+        mActivityEventListener.showAlert("Загрузка данных");
     }
 
     @Override
     public void showAlertInsert() {
-        mRoutesListEventListener.showAlert("Сохранение данных");
+        mActivityEventListener.showAlert("Сохранение данных");
     }
 
     @Override
     public void hideAlert() {
-        mRoutesListEventListener.hideAlert();
+        mActivityEventListener.hideAlert();
     }
 
 
     @Override
     public int getListItemsCount() {
         return mData.size();
+    }
+
+    @Override
+    public void showAlertFailLoading() {
+        mActivityEventListener.showAlertRetryOnlineLoading("Загрузка не успешна");
     }
 
     @Override

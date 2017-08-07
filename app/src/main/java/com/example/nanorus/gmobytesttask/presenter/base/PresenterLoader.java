@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.presenter_base;
+package com.example.nanorus.gmobytesttask.presenter.base;
 
 import android.content.Context;
 import android.support.v4.content.Loader;

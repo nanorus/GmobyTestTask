@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.presenter_base;
+package com.example.nanorus.gmobytesttask.presenter.base;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

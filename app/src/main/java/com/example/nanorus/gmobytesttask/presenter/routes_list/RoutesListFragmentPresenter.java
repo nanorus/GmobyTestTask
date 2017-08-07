@@ -3,22 +3,13 @@ package com.example.nanorus.gmobytesttask.presenter.routes_list;
 import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.app.App;
 import com.example.nanorus.gmobytesttask.app.Router;
-import com.example.nanorus.gmobytesttask.app.bus.EventBus;
-import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListSetIsCachingEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListSetIsOnlineLoadingEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListShowAlertEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListShowAlertRetryOnlineLoading;
-import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListShowRefreshingEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListUpdateOfflineEvent;
-import com.example.nanorus.gmobytesttask.app.bus.event.routes_list.RoutesListUpdateOnlineEvent;
 import com.example.nanorus.gmobytesttask.model.DataConverter;
 import com.example.nanorus.gmobytesttask.model.DataManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
-import com.example.nanorus.gmobytesttask.presenter_base.Presenter;
+import com.example.nanorus.gmobytesttask.presenter.base.Presenter;
 import com.example.nanorus.gmobytesttask.utils.InternetConnection;
 import com.example.nanorus.gmobytesttask.view.routes_list.IRoutesListFragment;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +35,12 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     private List<RouteMainInfoPojo> mData;
 
-    private int count = 0;
     private boolean isPresenterCreated = false;
     private boolean isOnlineLoading = false;
     private boolean isOfflineSaving = false;
 
     public RoutesListFragmentPresenter() {
-        EventBus.getInstance().register(this);
     }
-
 
     @Override
     public void updateListOnline() {
@@ -82,9 +70,8 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
                 throwable -> {
                     throwable.printStackTrace();
-                    EventBus.getInstance().post(new RoutesListShowAlertEvent(null, false));
-                    EventBus.getInstance().post(new RoutesListSetIsOnlineLoadingEvent(false));
-                    EventBus.getInstance().post(new RoutesListShowAlertRetryOnlineLoading("Загрузка не успешна"));
+                    mView.hideAlert();
+                    mView.showAlertFailLoading();
                 },
 
                 () -> {
@@ -95,9 +82,9 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                             showNoDataText(true);
                         else
                             showNoDataText(false);
-                        saveToDatabase();
+                        saveToDatabaseAndUpdateListOffline();
                     } else {
-                        EventBus.getInstance().post(new RoutesListShowAlertEvent(App.getApp().getString(R.string.server_error), true));
+                        mView.showAlertRetryOnlineLoading(App.getApp().getString(R.string.server_error));
                     }
                 }
         );
@@ -112,7 +99,6 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     @Override
     public void updateListOffline() {
-        EventBus.getInstance().post(new RoutesListShowAlertEvent("Открытие", true));
         routeMainInfoPojoObservable = DataManager.loadRoutesMainInfoOffline(mFromDate, mToDate)
                 .onBackpressureBuffer()
                 .subscribeOn(Schedulers.io())
@@ -131,9 +117,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                     }
                 }
         );
-        EventBus.getInstance().post(new RoutesListShowAlertEvent(null, false));
-        EventBus.getInstance().post(new RoutesListShowRefreshingEvent(false));
-
+        mView.showSwipeRefreshing(false);
     }
 
     @Override
@@ -154,27 +138,13 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
         }
     }
 
-    @Subscribe
-    public void updateListOnlineListener(RoutesListUpdateOnlineEvent event) {
-        updateListOnline();
-    }
-
-    @Subscribe
-    public void updateListOfflineListener(RoutesListUpdateOfflineEvent event) {
-        updateListOffline();
-    }
-
-    private void saveToDatabase() {
+    private void saveToDatabaseAndUpdateListOffline() {
         isOfflineSaving = true;
-        System.out.println("set isOfflineSaving: true");
         mView.showAlertInsert();
 
         Completable.create(completableSubscriber -> {
-
             DataManager.cleanSavedRoutes(false);
             DataManager.saveRoutes(request[0]);
-
-            EventBus.getInstance().post(new RoutesListSetIsCachingEvent(false));
             completableSubscriber.onCompleted();
         })
                 .subscribeOn(Schedulers.newThread())
@@ -182,8 +152,9 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                 .subscribe(
                         () -> {
                             isOfflineSaving = false;
-                            System.out.println("set isOfflineSaving: false");
                             mView.hideAlert();
+                            mView.showSwipeRefreshing(false);
+                            updateListOffline();
                         },
                         Throwable::printStackTrace
                 );
@@ -192,8 +163,6 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     @Override
     public void onViewAttached(IRoutesListFragment view) {
         this.mView = view;
-        this.count++;
-        System.out.println("view atached " + this.count + " times");
 
         mView.createAndSetAdapter();
 
@@ -206,13 +175,10 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
             mView.fullUpdateAdapter(mData);
             mData.clear();
             mData = null;
-            System.out.println("presenter: restoring data");
             if (isOfflineSaving) {
                 mView.showAlertInsert();
-                System.out.println("presenter: show alert insert");
             } else if (isOnlineLoading) {
                 mView.showAlertLoading();
-                System.out.println("presenter: show alert loading");
             }
 
         }
@@ -228,7 +194,6 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
             mData.clear();
             mData.addAll(mView.getData());
         }
-
         this.mView = null;
     }
 
@@ -236,6 +201,5 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     public void onDestroyed() {
         // releasing presenter
         releasePresenter();
-        EventBus.getInstance().unregister(this);
     }
 }

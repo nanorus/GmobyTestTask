@@ -22,7 +22,9 @@ public interface IRoutesListFragment {
 
     void showAlertNoInternet();
 
-    void showAlertServerError();
+    void showSwipeRefreshing(boolean willShow);
+
+    void showAlertRetryOnlineLoading(String message);
 
     void showAlertLoading();
 
@@ -32,6 +34,7 @@ public interface IRoutesListFragment {
 
     int getListItemsCount();
 
+    void showAlertFailLoading();
 
     RouteMainInfoPojo getDataByListPosition(int position);
 

@@ -8,14 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
-import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesActivityPresenter;
+import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListActivityPresenter;
 
-public class RoutesActivity extends AppCompatActivity implements IRoutesActivity, RoutesListFragment.RoutesListEventListener {
+public class RoutesListActivity extends AppCompatActivity implements IRoutesListActivity, RoutesListFragment.RoutesListEventListener {
 
     SwipeRefreshLayout activity_routes_swipe;
-    RoutesActivityPresenter mPresenter;
+    RoutesListActivityPresenter mPresenter;
+
+    RoutesListFragment routesListFragment;
 
     AlertDialog simpleAlert;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +26,13 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
         setContentView(R.layout.activity_routes);
         EventBus.getInstance().register(this);
 
+        routesListFragment = (RoutesListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_routes_list);
+
+
         activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
 
-        mPresenter = new RoutesActivityPresenter(getView());
+        mPresenter = new RoutesListActivityPresenter(getView());
 
         activity_routes_swipe.setOnRefreshListener(() -> mPresenter.onRefresh());
 
@@ -36,18 +43,6 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void startShowRefreshing() {
-        if (!activity_routes_swipe.isRefreshing())
-            activity_routes_swipe.setRefreshing(true);
-    }
-
-    @Override
-    public void stopShowRefreshing() {
-        if (activity_routes_swipe.isRefreshing())
-            activity_routes_swipe.setRefreshing(false);
-        activity_routes_swipe.setEnabled(true);
-    }
 
     public void showAlertRetryOnlineLoading(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -58,7 +53,18 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
     }
 
     @Override
-    public IRoutesActivity getView() {
+    public void showSwipeRefreshing(boolean willShow) {
+        if (willShow) {
+            if (!activity_routes_swipe.isRefreshing())
+                activity_routes_swipe.setRefreshing(true);
+        } else {
+            if (activity_routes_swipe.isRefreshing())
+                activity_routes_swipe.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public IRoutesListActivity getView() {
         return this;
     }
 
@@ -77,21 +83,8 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
         super.onDestroy();
     }
 
-
-    @Override
-    public void showAlertLoadFail(String message) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(message)
-                .setPositiveButton(R.string.alert_button_retry, (dialogInterface, i) -> mPresenter.onRefresh())
-                .setOnDismissListener(DialogInterface::dismiss)
-                .show();
-
-    }
-
     @Override
     public void showAlert(String message) {
-
         hideAlert();
         simpleAlert = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -102,19 +95,19 @@ public class RoutesActivity extends AppCompatActivity implements IRoutesActivity
 
     @Override
     public void hideAlert() {
-
         try {
             if (!this.isFinishing() && simpleAlert != null && simpleAlert.isShowing()) {
                 simpleAlert.dismiss();
             }
         } catch (java.lang.IllegalArgumentException e) {
-
+            e.printStackTrace();
         }
-
     }
 
-
-
+    @Override
+    public void updateRoutesListOnline() {
+        routesListFragment.updateListOnline();
+    }
 
 
 }

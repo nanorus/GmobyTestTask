@@ -1,17 +1,17 @@
 package com.example.nanorus.gmobytesttask.view.routes_list;
 
-public interface IRoutesActivity {
+public interface IRoutesListActivity {
 
     void showAlert(String message);
 
     void hideAlert();
 
-    void startShowRefreshing();
-
-    void stopShowRefreshing();
+    void updateRoutesListOnline();
 
     void showAlertRetryOnlineLoading(String message);
 
-    IRoutesActivity getView();
+    void showSwipeRefreshing(boolean willShow);
+
+    IRoutesListActivity getView();
 
 }

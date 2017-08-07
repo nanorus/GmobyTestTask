@@ -1,6 +1,6 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
-public interface IRoutesActivityPresenter {
+public interface IRoutesListActivityPresenter {
 
     void onRefresh();
 
