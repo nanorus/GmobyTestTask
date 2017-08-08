@@ -31,20 +31,17 @@ public abstract class BasePresenterActivity<P extends Presenter<V>, V> extends A
         getSupportLoaderManager().initLoader(loaderId(), null, new LoaderManager.LoaderCallbacks<P>() {
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
-                Log.i(TAG, "onCreateLoader");
                 return new PresenterLoader<>(BasePresenterActivity.this, getPresenterFactory(), tag());
             }
 
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
-                Log.i(TAG, "onLoadFinished");
                 BasePresenterActivity.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
-                Log.i(TAG, "onLoaderReset");
                 BasePresenterActivity.this.presenter = null;
             }
         });
@@ -53,7 +50,6 @@ public abstract class BasePresenterActivity<P extends Presenter<V>, V> extends A
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i(TAG, "onStart-" + tag());
         presenter.onViewAttached(getPresenterView());
     }
 
@@ -61,7 +57,6 @@ public abstract class BasePresenterActivity<P extends Presenter<V>, V> extends A
     protected void onStop() {
         presenter.onViewDetached();
         super.onStop();
-        Log.i(TAG, "onStop-" + tag());
     }
 
     /**

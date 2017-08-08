@@ -7,12 +7,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.nanorus.gmobytesttask.R;
+import com.example.nanorus.gmobytesttask.app.App;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListActivityPresenter;
+
+import javax.inject.Inject;
 
 public class RoutesListActivity extends AppCompatActivity implements IRoutesListActivity, RoutesListFragment.RoutesListEventListener {
 
     SwipeRefreshLayout activity_routes_swipe;
+
+    @Inject
     RoutesListActivityPresenter mPresenter;
 
     RoutesListFragment routesListFragment;
@@ -28,11 +33,10 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
 
         routesListFragment = (RoutesListFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_routes_list);
-
-
         activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
 
-        mPresenter = new RoutesListActivityPresenter(getView());
+        App.getApp().getRoutesListActivityComponent().inject(this);
+        mPresenter.bindView(this);
 
         activity_routes_swipe.setOnRefreshListener(() -> mPresenter.onRefresh());
 

@@ -1,10 +1,10 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.app.App;
 import com.example.nanorus.gmobytesttask.app.Router;
 import com.example.nanorus.gmobytesttask.model.DataConverter;
 import com.example.nanorus.gmobytesttask.model.DataManager;
+import com.example.nanorus.gmobytesttask.model.ResourceManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
 import com.example.nanorus.gmobytesttask.presenter.base.Presenter;
@@ -13,6 +13,8 @@ import com.example.nanorus.gmobytesttask.view.routes_list.IRoutesListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import rx.Completable;
 import rx.Observable;
@@ -39,7 +41,11 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     private boolean isOnlineLoading = false;
     private boolean isOfflineSaving = false;
 
-    public RoutesListFragmentPresenter() {
+    private ResourceManager mResourceManager;
+
+    @Inject
+    public RoutesListFragmentPresenter(ResourceManager resourceManager) {
+        mResourceManager = resourceManager;
     }
 
     @Override
@@ -84,7 +90,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                             showNoDataText(false);
                         saveToDatabaseAndUpdateListOffline();
                     } else {
-                        mView.showAlertRetryOnlineLoading(App.getApp().getString(R.string.server_error));
+                        mView.showAlertRetryOnlineLoading( mResourceManager.getString(R.string.server_error));
                     }
                 }
         );

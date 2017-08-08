@@ -2,7 +2,6 @@ package com.example.nanorus.gmobytesttask.presenter.base;
 
 import android.content.Context;
 import android.support.v4.content.Loader;
-import android.util.Log;
 
 final class PresenterLoader<T extends Presenter> extends Loader<T> {
 
@@ -18,7 +17,6 @@ final class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     @Override
     protected void onStartLoading() {
-        Log.i("loader", "onStartLoading-" + tag);
 
         // if we already own a presenter instance, simply deliver it.
         if (presenter != null) {
@@ -32,7 +30,6 @@ final class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     @Override
     protected void onForceLoad() {
-        Log.i("loader", "onForceLoad-" + tag);
 
         // Create the Presenter using the Factory
         presenter = factory.create();
@@ -44,17 +41,14 @@ final class PresenterLoader<T extends Presenter> extends Loader<T> {
     @Override
     public void deliverResult(T data) {
         super.deliverResult(data);
-        Log.i("loader", "deliverResult-" + tag);
     }
 
     @Override
     protected void onStopLoading() {
-        Log.i("loader", "onStopLoading-" + tag);
     }
 
     @Override
     protected void onReset() {
-        Log.i("loader", "onReset-" + tag);
         if (presenter != null) {
             presenter.onDestroyed();
             presenter = null;

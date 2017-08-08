@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ import java.util.List;
 
 
 public class RoutesListFragment extends BasePresenterFragment<RoutesListFragmentPresenter, IRoutesListFragment> implements IRoutesListFragment {
-    private static final String TAG = "RoutesListFragment";
+
 
     RoutesListFragmentPresenter mPresenter;
 
@@ -43,12 +42,9 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
     private int mListItemClickedPosition = 0;
 
-
     public void updateListOnline() {
         mPresenter.updateListOnline();
     }
-
-
     public void updateListOffline() {
         mPresenter.updateListOffline();
     }
@@ -78,28 +74,20 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated-" + tag());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume-" + tag());
-        Log.d(TAG, "onResume- is_presenter_null:" + String.valueOf(mPresenter == null));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause-" + tag());
     }
 
     @Override
     public void onStop() {
-        Log.d(TAG, "onStop-" + tag());
-        /*
-        mPresenter.releasePresenter();
-        */
         super.onStop();
     }
 
@@ -148,7 +136,6 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
         fragment_routes_list_rv_list = (RecyclerView) v.findViewById(R.id.fragment_routes_list_rv_list);
         fragment_routes_list_tv_no_data = (TextView) v.findViewById(R.id.fragment_routes_list_tv_no_data);
         hideNoDataText();
-
 
         RecyclerViewItemClickSupport.addTo(fragment_routes_list_rv_list).setOnItemClickListener((recyclerView, position, v1) -> {
             mListItemClickedPosition = position;
