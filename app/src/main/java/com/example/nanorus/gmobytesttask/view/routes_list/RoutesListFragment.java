@@ -17,6 +17,7 @@ import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.presenter.base.BasePresenterFragment;
 import com.example.nanorus.gmobytesttask.presenter.base.PresenterFactory;
+import com.example.nanorus.gmobytesttask.presenter.routes_list.IRoutesListFragmentPresenter;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmentPresenter;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmentPresenterFactory;
 import com.example.nanorus.gmobytesttask.view.ui.RecyclerViewItemClickSupport;
@@ -29,7 +30,7 @@ import java.util.List;
 public class RoutesListFragment extends BasePresenterFragment<RoutesListFragmentPresenter, IRoutesListFragment> implements IRoutesListFragment {
 
 
-    RoutesListFragmentPresenter mPresenter;
+    IRoutesListFragmentPresenter mPresenter;
 
     RoutesListAdapter mAdapter;
     LinearLayoutManager mManager;

@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.presenter.route_info.RouteInfoActivityPresenter;
+import com.example.nanorus.gmobytesttask.app.App;
+import com.example.nanorus.gmobytesttask.presenter.route_info.IRouteInfoActivityPresenter;
+
+import javax.inject.Inject;
 
 public class RouteInfoActivity extends AppCompatActivity implements IRouteInfoActivity {
 
-    RouteInfoActivityPresenter mPresenter;
+    @Inject
+    IRouteInfoActivityPresenter mPresenter;
 
-    Toolbar route_info_toolbar;
+    private Toolbar route_info_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +38,9 @@ public class RouteInfoActivity extends AppCompatActivity implements IRouteInfoAc
         fragmentTransaction.add(R.id.frgmCont, routeInfoFragment);
         fragmentTransaction.commit();
 
-        mPresenter = new RouteInfoActivityPresenter(getView());
+        App.getApp().getRouteInfoComponent().inject(this);
+        mPresenter.bindView(this);
     }
-
 
 
     @Override

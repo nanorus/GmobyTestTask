@@ -6,8 +6,12 @@ public class RouteInfoActivityPresenter implements IRouteInfoActivityPresenter {
 
     private IRouteInfoActivity mView;
 
-    public RouteInfoActivityPresenter(IRouteInfoActivity view) {
-        mView = view;
+    public RouteInfoActivityPresenter() {
+    }
+
+    @Override
+    public void bindView(IRouteInfoActivity activity) {
+        mView = activity;
     }
 
     @Override

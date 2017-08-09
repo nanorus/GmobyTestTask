@@ -16,9 +16,11 @@ public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
     Subscription getRouteFullInfoSubscription;
 
 
-    public RouteInfoFragmentPresenter(IRouteInfoFragment view, int id) {
-        mView = view;
+    public RouteInfoFragmentPresenter() {
+    }
 
+    @Override
+    public void loadAndShowData( int id) {
         Observable<DatumPojo> datumPojoObservable = DataManager.getRouteFullInfo(id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -43,7 +45,11 @@ public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
                 },
                 () -> {
                 });
+    }
 
+    @Override
+    public void bindView(IRouteInfoFragment view) {
+        mView = view;
     }
 
     @Override

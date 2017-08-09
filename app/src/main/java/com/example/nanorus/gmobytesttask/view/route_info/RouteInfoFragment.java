@@ -11,23 +11,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.presenter.route_info.RouteInfoFragmentPresenter;
+import com.example.nanorus.gmobytesttask.app.App;
+import com.example.nanorus.gmobytesttask.presenter.route_info.IRouteInfoFragmentPresenter;
+
+import javax.inject.Inject;
 
 
 public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
 
-    private RouteInfoFragmentPresenter mPresenter;
+    @Inject
+    IRouteInfoFragmentPresenter mPresenter;
 
-    TextView fragment_route_info_tv_fromCity;
-    TextView fragment_route_info_tv_toCity;
-    TextView fragment_route_info_tv_fromDate;
-    TextView fragment_route_info_tv_toDate;
-    TextView fragment_route_info_tv_price;
-    TextView fragment_route_info_tv_fromInfo;
-    TextView fragment_route_info_tv_toInfo;
-    TextView fragment_route_info_tv_info;
-    TextView fragment_route_info_tv_busId;
-    TextView fragment_route_info_tv_reservationCount;
+    private TextView fragment_route_info_tv_fromCity;
+    private TextView fragment_route_info_tv_toCity;
+    private TextView fragment_route_info_tv_fromDate;
+    private TextView fragment_route_info_tv_toDate;
+    private TextView fragment_route_info_tv_price;
+    private TextView fragment_route_info_tv_fromInfo;
+    private TextView fragment_route_info_tv_toInfo;
+    private TextView fragment_route_info_tv_info;
+    private TextView fragment_route_info_tv_busId;
+    private TextView fragment_route_info_tv_reservationCount;
 
 
     @Override
@@ -61,7 +65,9 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
         fragment_route_info_tv_busId = (TextView) v.findViewById(R.id.fragment_route_info_tv_busId);
         fragment_route_info_tv_reservationCount = (TextView) v.findViewById(R.id.fragment_route_info_tv_reservationCount);
 
-        mPresenter = new RouteInfoFragmentPresenter(this, this.getArguments().getInt("id"));
+        App.getApp().getRouteInfoComponent().inject(this);
+        mPresenter.bindView(this);
+        mPresenter.loadAndShowData(this.getArguments().getInt("id"));
 
         return v;
     }

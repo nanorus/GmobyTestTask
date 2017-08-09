@@ -1,13 +1,13 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.app.Router;
 import com.example.nanorus.gmobytesttask.model.DataConverter;
 import com.example.nanorus.gmobytesttask.model.DataManager;
 import com.example.nanorus.gmobytesttask.model.ResourceManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
 import com.example.nanorus.gmobytesttask.presenter.base.Presenter;
+import com.example.nanorus.gmobytesttask.router.RoutesListRouter;
 import com.example.nanorus.gmobytesttask.utils.InternetConnection;
 import com.example.nanorus.gmobytesttask.view.routes_list.IRoutesListFragment;
 
@@ -42,10 +42,12 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     private boolean isOfflineSaving = false;
 
     private ResourceManager mResourceManager;
+    private RoutesListRouter mRoutesListRouter;
 
     @Inject
-    public RoutesListFragmentPresenter(ResourceManager resourceManager) {
+    public RoutesListFragmentPresenter(ResourceManager resourceManager, RoutesListRouter routesListRouter) {
         mResourceManager = resourceManager;
+        mRoutesListRouter = routesListRouter;
     }
 
     @Override
@@ -138,7 +140,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     public void onListItemClicked() {
         try {
             int clickedRouteId = mView.getDataByListPosition(mView.getListItemClickedPosition()).getId();
-            Router.navigateToRouteInfoActivity(mView.getViewContext(), clickedRouteId);
+            mRoutesListRouter.navigateToRouteInfoActivity(mView.getViewContext(), clickedRouteId);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

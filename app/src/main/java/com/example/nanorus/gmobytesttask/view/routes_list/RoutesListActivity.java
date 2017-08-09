@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.app.App;
 import com.example.nanorus.gmobytesttask.app.bus.EventBus;
-import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListActivityPresenter;
+import com.example.nanorus.gmobytesttask.presenter.routes_list.IRoutesListActivityPresenter;
 
 import javax.inject.Inject;
 
@@ -18,7 +18,7 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
     SwipeRefreshLayout activity_routes_swipe;
 
     @Inject
-    RoutesListActivityPresenter mPresenter;
+    IRoutesListActivityPresenter mPresenter;
 
     RoutesListFragment routesListFragment;
 
