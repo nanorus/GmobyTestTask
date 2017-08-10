@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.nanorus.gmobytesttask.app.App;
 import com.example.nanorus.gmobytesttask.model.DataConverter;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
@@ -17,17 +16,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import rx.Observable;
 
+@Singleton
 public class DatabaseManager {
 
-    private static DatabaseHelper sDatabaseHelper = null;
+    private DatabaseHelper mDatabaseHelper;
 
-    public static DatabaseHelper getDatabaseHelper() {
-        if (sDatabaseHelper == null) {
-            sDatabaseHelper = new DatabaseHelper(App.getApp().getApplicationContext());
-        }
-        return sDatabaseHelper;
+    @Inject
+    public DatabaseManager(DatabaseHelper databaseHelper){
+        mDatabaseHelper = databaseHelper;
+    }
+
+
+    public DatabaseHelper getDatabaseHelper() {
+        return mDatabaseHelper;
     }
 
     // define names of tables and columns
@@ -56,10 +62,9 @@ public class DatabaseManager {
 
     private final static String COMMA_SEP = ",";
 
-    public static void putRoutes(RequestPojo routesFullInfo) {
+    public void putRoutes(RequestPojo routesFullInfo) {
         try {
-            DatabaseHelper databaseHelper = getDatabaseHelper();
-            SQLiteDatabase database = databaseHelper.getWritableDatabase();
+            SQLiteDatabase database = getDatabaseHelper().getWritableDatabase();
 
             ContentValues contentValues = new ContentValues();
             DatumPojo datumPojo;
@@ -130,11 +135,10 @@ public class DatabaseManager {
 
     }
 
-    public static Observable<RouteMainInfoPojo> getRoutesMainInfo(int fromDate, int toDate) {
+    public  Observable<RouteMainInfoPojo> getRoutesMainInfo(int fromDate, int toDate) {
         Observable<RouteMainInfoPojo> routesMainInfo = Observable.create(
                 subscriber -> {
-                    DatabaseHelper helper = DatabaseManager.getDatabaseHelper();
-                    SQLiteDatabase database = helper.getReadableDatabase();
+                    SQLiteDatabase database = getDatabaseHelper().getReadableDatabase();
 
                     Cursor cursor = database.rawQuery("SELECT " +
                                     COLUMN_NAME_ROUTES_ID + " AS Id" + COMMA_SEP +
@@ -175,7 +179,7 @@ public class DatabaseManager {
     }
 
 
-    public static Observable<DatumPojo> getRouteFullInfo(int routeId) {
+    public Observable<DatumPojo> getRouteFullInfo(int routeId) {
         Observable<DatumPojo> fullRouteInfoPojoObservable = Observable.create(subscriber -> {
             DatumPojo routeFullInfoPojo;
 
@@ -207,8 +211,7 @@ public class DatabaseManager {
             int reservationCount = 0;
 
 
-            DatabaseHelper helper = DatabaseManager.getDatabaseHelper();
-            SQLiteDatabase database = helper.getReadableDatabase();
+            SQLiteDatabase database = getDatabaseHelper().getReadableDatabase();
 
             Cursor cursor = database.rawQuery(
                     "SELECT " +
@@ -280,33 +283,6 @@ public class DatabaseManager {
             cursor.close();
             fromCity = new FromCityPojo(fromCityHighlight, fromCityId, fromCityName);
             toCity = new ToCityPojo(toCityHighlight, toCityId, toCityName);
-
-/*
-            // set cities
-
-            Cursor fromCityTableCursor = database.rawQuery("SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME_FROM_CITY +
-                    " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_ID + "=" + fromCityId + " LIMIT 1", null);
-
-            if (fromCityTableCursor.moveToFirst()) {
-
-                do {
-                } while (fromCityTableCursor.moveToNext());
-
-            }
-
-            fromCityTableCursor.close();
-
-            Cursor toCityTableCursor = database.rawQuery("SELECT * FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY +
-                    " WHERE " + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_ID + "=" + toCityId + " LIMIT 1", null);
-
-            if (toCityTableCursor.moveToFirst()) {
-                do {
-                } while (toCityTableCursor.moveToNext());
-            }
-
-            toCityTableCursor.close();
-*/
-
             routeFullInfoPojo = new DatumPojo(routeId, fromCity, fromDate, fromTime, fromInfo,
                     toCity, toDate, toTime, toInfo, info, price, busId, reservationCount);
 
@@ -317,9 +293,8 @@ public class DatabaseManager {
         return fullRouteInfoPojoObservable;
     }
 
-    public static void cleanSavedRoutes() {
-        DatabaseHelper helper = getDatabaseHelper();
-        SQLiteDatabase db = helper.getWritableDatabase();
+    public void cleanSavedRoutes() {
+        SQLiteDatabase db = getDatabaseHelper().getWritableDatabase();
         db.delete(DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES, null, null);
         db.delete(DatabaseContract.DatabaseEntry.TABLE_NAME_FROM_CITY, null, null);
         db.delete(DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY, null, null);
@@ -327,7 +302,7 @@ public class DatabaseManager {
 
     @Override
     protected void finalize() throws Throwable {
-        DatabaseManager.getDatabaseHelper().close();
+        getDatabaseHelper().close();
         super.finalize();
     }
 }

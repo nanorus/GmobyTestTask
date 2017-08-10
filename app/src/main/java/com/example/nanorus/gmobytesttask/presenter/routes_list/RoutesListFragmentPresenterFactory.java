@@ -12,11 +12,12 @@ public class RoutesListFragmentPresenterFactory implements PresenterFactory<Rout
 
 
     public RoutesListFragmentPresenterFactory(){
-        App.getApp().getRoutesListActivityComponent().inject(this);
+        App.getApp().getRoutesListComponent().inject(this);
     }
 
     @Override
     public RoutesListFragmentPresenter create() {
         return mRoutesListFragmentPresenter;
     }
+
 }

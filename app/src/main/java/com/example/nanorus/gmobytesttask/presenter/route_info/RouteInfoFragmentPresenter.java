@@ -5,6 +5,8 @@ import com.example.nanorus.gmobytesttask.model.DataManager;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
 import com.example.nanorus.gmobytesttask.view.route_info.IRouteInfoFragment;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -15,13 +17,16 @@ public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
     IRouteInfoFragment mView;
     Subscription getRouteFullInfoSubscription;
 
+    DataManager mDataManager;
 
-    public RouteInfoFragmentPresenter() {
+    @Inject
+    public RouteInfoFragmentPresenter(DataManager dataManager) {
+        mDataManager = dataManager;
     }
 
     @Override
-    public void loadAndShowData( int id) {
-        Observable<DatumPojo> datumPojoObservable = DataManager.getRouteFullInfo(id)
+    public void loadAndShowData(int id) {
+        Observable<DatumPojo> datumPojoObservable = mDataManager.getRouteFullInfo(id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
         getRouteFullInfoSubscription = datumPojoObservable.subscribe(

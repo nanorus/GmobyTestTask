@@ -43,11 +43,17 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     private ResourceManager mResourceManager;
     private RoutesListRouter mRoutesListRouter;
+    private DataManager mDataManager;
+    InternetConnection mInternetConnection;
 
     @Inject
-    public RoutesListFragmentPresenter(ResourceManager resourceManager, RoutesListRouter routesListRouter) {
+    public RoutesListFragmentPresenter(ResourceManager resourceManager,
+                                       RoutesListRouter routesListRouter, DataManager dataManager,
+                                       InternetConnection internetConnection) {
         mResourceManager = resourceManager;
         mRoutesListRouter = routesListRouter;
+        mDataManager = dataManager;
+        mInternetConnection = internetConnection;
     }
 
     @Override
@@ -62,7 +68,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
         ArrayList<RouteMainInfoPojo> routeMainInfoPojos = new ArrayList<>();
         request = new RequestPojo[1];
 
-        requestPojoObservable = DataManager.loadRoutesOnline(mFromDate, mToDate)
+        requestPojoObservable = mDataManager.loadRoutesOnline(mFromDate, mToDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
@@ -107,7 +113,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     @Override
     public void updateListOffline() {
-        routeMainInfoPojoObservable = DataManager.loadRoutesMainInfoOffline(mFromDate, mToDate)
+        routeMainInfoPojoObservable = mDataManager.loadRoutesMainInfoOffline(mFromDate, mToDate)
                 .onBackpressureBuffer()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -117,7 +123,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                 Throwable::printStackTrace,
                 () -> {
                     if (mView.getListItemsCount() == 0) {
-                        if (InternetConnection.isOnline()) {
+                        if (mInternetConnection.isOnline()) {
                             updateListOnline();
                         } else {
                             mView.showAlertNoInternet();
@@ -151,8 +157,8 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
         mView.showAlertInsert();
 
         Completable.create(completableSubscriber -> {
-            DataManager.cleanSavedRoutes(false);
-            DataManager.saveRoutes(request[0]);
+            mDataManager.cleanSavedRoutes();
+            mDataManager.saveRoutes(request[0]);
             completableSubscriber.onCompleted();
         })
                 .subscribeOn(Schedulers.newThread())

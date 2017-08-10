@@ -35,7 +35,7 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
                 .findFragmentById(R.id.fragment_routes_list);
         activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
 
-        App.getApp().getRoutesListActivityComponent().inject(this);
+        App.getApp().getRoutesListComponent().inject(this);
         mPresenter.bindView(this);
 
         activity_routes_swipe.setOnRefreshListener(() -> mPresenter.onRefresh());

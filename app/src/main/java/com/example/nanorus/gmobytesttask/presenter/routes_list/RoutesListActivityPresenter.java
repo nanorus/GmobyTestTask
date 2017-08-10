@@ -12,15 +12,18 @@ public class RoutesListActivityPresenter implements IRoutesListActivityPresenter
     private IRoutesListActivity mView;
 
     private ResourceManager mResourceManager;
+    private InternetConnection mInternetConnection;
 
     @Inject
-    public RoutesListActivityPresenter(ResourceManager resourceManager) {
+    public RoutesListActivityPresenter(ResourceManager resourceManager,
+                                       InternetConnection internetConnection) {
         mResourceManager = resourceManager;
+        mInternetConnection = internetConnection;
     }
 
     @Override
     public void onRefresh() {
-        if (InternetConnection.isOnline()) {
+        if (mInternetConnection.isOnline()) {
             mView.updateRoutesListOnline();
         } else {
             mView.showSwipeRefreshing(false);

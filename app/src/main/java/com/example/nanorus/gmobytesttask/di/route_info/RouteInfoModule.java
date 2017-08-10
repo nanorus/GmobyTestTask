@@ -5,18 +5,15 @@ import com.example.nanorus.gmobytesttask.presenter.route_info.IRouteInfoFragment
 import com.example.nanorus.gmobytesttask.presenter.route_info.RouteInfoActivityPresenter;
 import com.example.nanorus.gmobytesttask.presenter.route_info.RouteInfoFragmentPresenter;
 
+import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
 
 @Module
-public class RouteInfoModule {
-    @Provides
-    IRouteInfoActivityPresenter provideRouteInfoActivityPresenter() {
-        return new RouteInfoActivityPresenter();
-    }
+public abstract class RouteInfoModule {
 
-    @Provides
-    IRouteInfoFragmentPresenter provideRouteInfoFragmentPresenter(){
-        return new RouteInfoFragmentPresenter();
-    }
+    @Binds
+    abstract IRouteInfoFragmentPresenter provideRouteInfoFragmentPresenter(RouteInfoFragmentPresenter routeInfoFragmentPresenter);
+
+    @Binds
+    abstract IRouteInfoActivityPresenter provideRouteInfoActivityPresenter(RouteInfoActivityPresenter routeInfoActivityPresenter);
 }

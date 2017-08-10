@@ -3,7 +3,9 @@ package com.example.nanorus.gmobytesttask.model;
 import android.content.Context;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class ResourceManager {
 
     Context mContext;

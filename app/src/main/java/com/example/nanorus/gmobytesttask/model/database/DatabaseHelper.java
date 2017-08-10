@@ -4,11 +4,16 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final int DB_VERSION = 1;
     public static final String DB_NAME = "RoutesDatabase2.db";
 
+    @Inject
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }

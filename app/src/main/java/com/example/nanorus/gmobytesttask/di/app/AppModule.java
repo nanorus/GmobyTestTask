@@ -18,7 +18,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
 

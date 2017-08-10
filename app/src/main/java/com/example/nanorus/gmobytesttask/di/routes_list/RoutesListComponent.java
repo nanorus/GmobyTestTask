@@ -6,7 +6,7 @@ import com.example.nanorus.gmobytesttask.view.routes_list.RoutesListFragment;
 
 import dagger.Subcomponent;
 
-@Subcomponent(modules = {RoutesListModule.class})
+@Subcomponent (modules = {RoutesListModule.class})
 public interface RoutesListComponent {
 
     void inject(RoutesListActivity activity);
