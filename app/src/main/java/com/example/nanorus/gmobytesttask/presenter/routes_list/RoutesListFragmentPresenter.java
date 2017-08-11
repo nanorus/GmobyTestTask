@@ -44,7 +44,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     private ResourceManager mResourceManager;
     private RoutesListRouter mRoutesListRouter;
     private DataManager mDataManager;
-    InternetConnection mInternetConnection;
+    private InternetConnection mInternetConnection;
 
     @Inject
     public RoutesListFragmentPresenter(ResourceManager resourceManager,
@@ -98,7 +98,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                             showNoDataText(false);
                         saveToDatabaseAndUpdateListOffline();
                     } else {
-                        mView.showAlertRetryOnlineLoading( mResourceManager.getString(R.string.server_error));
+                        mView.showAlertRetryOnlineLoading(mResourceManager.getString(R.string.server_error));
                     }
                 }
         );

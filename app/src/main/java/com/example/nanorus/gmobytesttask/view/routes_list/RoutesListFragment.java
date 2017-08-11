@@ -30,22 +30,23 @@ import java.util.List;
 public class RoutesListFragment extends BasePresenterFragment<RoutesListFragmentPresenter, IRoutesListFragment> implements IRoutesListFragment {
 
 
-    IRoutesListFragmentPresenter mPresenter;
+    private IRoutesListFragmentPresenter mPresenter;
 
-    RoutesListAdapter mAdapter;
-    LinearLayoutManager mManager;
-    List<RouteMainInfoPojo> mData;
+    private RoutesListAdapter mAdapter;
+    private LinearLayoutManager mManager;
+    private List<RouteMainInfoPojo> mData;
 
-    RecyclerView fragment_routes_list_rv_list;
-    TextView fragment_routes_list_tv_no_data;
+    private RecyclerView fragment_routes_list_rv_list;
+    private TextView fragment_routes_list_tv_no_data;
 
-    RoutesListEventListener mActivityEventListener;
+    private RoutesListEventListener mActivityEventListener;
 
     private int mListItemClickedPosition = 0;
 
     public void updateListOnline() {
         mPresenter.updateListOnline();
     }
+
     public void updateListOffline() {
         mPresenter.updateListOffline();
     }
@@ -64,12 +65,26 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
     @Override
     public void onAttach(Activity activity) {
-        try {
-            mActivityEventListener = (RoutesListEventListener) activity;
-        } catch (ClassCastException e) {
-            e.printStackTrace();
+        if (android.os.Build.VERSION.SDK_INT < 23) {
+            try {
+                mActivityEventListener = (RoutesListEventListener) activity;
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            }
         }
         super.onAttach(activity);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            try {
+                mActivityEventListener = (RoutesListEventListener) context;
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            }
+            super.onAttach(context);
+        }
     }
 
     @Override

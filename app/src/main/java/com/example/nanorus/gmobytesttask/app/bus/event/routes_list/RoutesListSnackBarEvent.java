@@ -2,7 +2,7 @@ package com.example.nanorus.gmobytesttask.app.bus.event.routes_list;
 
 public class RoutesListSnackBarEvent {
 
-    String mMessage;
+    private String mMessage;
 
     public RoutesListSnackBarEvent(String message) {
         mMessage = message;

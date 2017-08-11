@@ -15,12 +15,11 @@ public class ModelModule {
     @Singleton
     @Named("routesRetroClient")
     Retrofit provideRoutesRetroClient() {
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl("http://projects.gmoby.org/web/index.php/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-        return retrofit;
     }
 
 }

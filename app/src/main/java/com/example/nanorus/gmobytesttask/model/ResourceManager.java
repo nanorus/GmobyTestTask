@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 @Singleton
 public class ResourceManager {
 
-    Context mContext;
+    private Context mContext;
 
     @Inject
     public ResourceManager(Context context) {

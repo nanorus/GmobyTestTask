@@ -10,11 +10,11 @@ import javax.inject.Singleton;
 @Singleton
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DB_VERSION = 1;
-    public static final String DB_NAME = "RoutesDatabase2.db";
+    private static final int DB_VERSION = 1;
+    private static final String DB_NAME = "RoutesDatabase2.db";
 
     @Inject
-    public DatabaseHelper(Context context) {
+    DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 

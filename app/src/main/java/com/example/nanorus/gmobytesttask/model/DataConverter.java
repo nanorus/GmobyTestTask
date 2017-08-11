@@ -22,8 +22,7 @@ public class DataConverter {
             e.printStackTrace();
         }
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.ENGLISH);
-        String format = formatter.format(date);
-        return format;
+        return formatter.format(date);
 
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class RoutesListAdapter extends RecyclerView.Adapter<RoutesListAdapter.RoutesListViewHolder> {
 
-    List<RouteMainInfoPojo> mData;
+    private List<RouteMainInfoPojo> mData;
 
     public RoutesListAdapter(List<RouteMainInfoPojo> data) {
         mData = data;
@@ -22,13 +22,12 @@ public class RoutesListAdapter extends RecyclerView.Adapter<RoutesListAdapter.Ro
     @Override
     public RoutesListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.routes_list_item, parent, false);
-        RoutesListViewHolder vh = new RoutesListViewHolder(view);
-        return vh;
+        return new RoutesListViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RoutesListViewHolder holder, int position) {
-     //   System.out.println("onBindViewHolder");
+        //   System.out.println("onBindViewHolder");
         holder.routes_list_item_tv_fromCity.setText(mData.get(position).getFromCityName());
         holder.routes_list_item_tv_toCity.setText(mData.get(position).getToCityName());
         holder.routes_list_item_tv_fromDate.setText(mData.get(position).getFromDate());

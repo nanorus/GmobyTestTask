@@ -6,7 +6,7 @@ import static com.example.nanorus.gmobytesttask.model.database.DatabaseContract.
 import static com.example.nanorus.gmobytesttask.model.database.DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES;
 import static com.example.nanorus.gmobytesttask.model.database.DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY;
 
-public class DatabaseContract {
+class DatabaseContract {
 
     public DatabaseContract() {
     }

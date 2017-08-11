@@ -27,12 +27,12 @@ public class DatabaseManager {
     private DatabaseHelper mDatabaseHelper;
 
     @Inject
-    public DatabaseManager(DatabaseHelper databaseHelper){
+    DatabaseManager(DatabaseHelper databaseHelper) {
         mDatabaseHelper = databaseHelper;
     }
 
 
-    public DatabaseHelper getDatabaseHelper() {
+    private DatabaseHelper getDatabaseHelper() {
         return mDatabaseHelper;
     }
 
@@ -135,8 +135,8 @@ public class DatabaseManager {
 
     }
 
-    public  Observable<RouteMainInfoPojo> getRoutesMainInfo(int fromDate, int toDate) {
-        Observable<RouteMainInfoPojo> routesMainInfo = Observable.create(
+    public Observable<RouteMainInfoPojo> getRoutesMainInfo(int fromDate, int toDate) {
+        return Observable.create(
                 subscriber -> {
                     SQLiteDatabase database = getDatabaseHelper().getReadableDatabase();
 
@@ -160,7 +160,7 @@ public class DatabaseManager {
                             , null);
                     if (cursor.moveToFirst()) {
                         do {
-                        RouteMainInfoPojo routeMainInfoPojo =   new RouteMainInfoPojo(
+                            RouteMainInfoPojo routeMainInfoPojo = new RouteMainInfoPojo(
                                     cursor.getInt(cursor.getColumnIndex("Id")),
                                     cursor.getString(cursor.getColumnIndex("FromCity")),
                                     cursor.getString(cursor.getColumnIndex("ToCity")),
@@ -175,12 +175,11 @@ public class DatabaseManager {
                     subscriber.onCompleted();
                     cursor.close();
                 });
-        return routesMainInfo;
     }
 
 
     public Observable<DatumPojo> getRouteFullInfo(int routeId) {
-        Observable<DatumPojo> fullRouteInfoPojoObservable = Observable.create(subscriber -> {
+        return Observable.create(subscriber -> {
             DatumPojo routeFullInfoPojo;
 
             DateFormat dateFormatDataBase = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -289,8 +288,6 @@ public class DatabaseManager {
             subscriber.onNext(routeFullInfoPojo);
             subscriber.onCompleted();
         });
-
-        return fullRouteInfoPojoObservable;
     }
 
     public void cleanSavedRoutes() {

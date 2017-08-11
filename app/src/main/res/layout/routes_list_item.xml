@@ -16,7 +16,7 @@
         android:layout_alignBottom="@+id/routes_list_item_tv_price"
         android:layout_toEndOf="@+id/routes_list_item_tv_price"
         android:layout_toRightOf="@+id/routes_list_item_tv_price"
-        android:text=" грн."/>
+        android:text="@string/uah"/>
 
     <TextView
         android:id="@+id/textView13"

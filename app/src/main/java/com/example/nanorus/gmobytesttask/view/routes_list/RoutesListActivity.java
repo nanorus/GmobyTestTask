@@ -15,14 +15,14 @@ import javax.inject.Inject;
 
 public class RoutesListActivity extends AppCompatActivity implements IRoutesListActivity, RoutesListFragment.RoutesListEventListener {
 
-    SwipeRefreshLayout activity_routes_swipe;
+    private SwipeRefreshLayout activity_routes_swipe;
 
     @Inject
     IRoutesListActivityPresenter mPresenter;
 
-    RoutesListFragment routesListFragment;
+    private RoutesListFragment routesListFragment;
 
-    AlertDialog simpleAlert;
+    private AlertDialog simpleAlert;
 
 
     @Override
@@ -84,7 +84,7 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
         mPresenter.releasePresenter();
         mPresenter = null;
         hideAlert();
-        if (this.isFinishing()){
+        if (this.isFinishing()) {
             App.getApp().clearRoutesListComponent();
         }
         super.onDestroy();

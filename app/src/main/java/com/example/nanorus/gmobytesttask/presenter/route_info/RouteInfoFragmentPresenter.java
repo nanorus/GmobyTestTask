@@ -14,13 +14,13 @@ import rx.schedulers.Schedulers;
 
 public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
 
-    IRouteInfoFragment mView;
-    Subscription getRouteFullInfoSubscription;
+    private IRouteInfoFragment mView;
+    private Subscription getRouteFullInfoSubscription;
 
-    DataManager mDataManager;
+    private DataManager mDataManager;
 
     @Inject
-    public RouteInfoFragmentPresenter(DataManager dataManager) {
+    RouteInfoFragmentPresenter(DataManager dataManager) {
         mDataManager = dataManager;
     }
 
@@ -45,9 +45,7 @@ public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
                     mView.setBusIdField(String.valueOf(datumPojo.getBusId()));
                     mView.setReservationCountField(String.valueOf(datumPojo.getReservationCount()));
                 },
-                throwable -> {
-                    throwable.printStackTrace();
-                },
+                Throwable::printStackTrace,
                 () -> {
                 });
     }

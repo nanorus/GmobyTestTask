@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 @Singleton
 public class InternetConnection {
 
-    Context mContext;
+    private Context mContext;
 
     @Inject
     public InternetConnection(Context context) {

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 public abstract class BasePresenterActivity<P extends Presenter<V>, V> extends AppCompatActivity {
 

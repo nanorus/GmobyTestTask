@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RoutesRetroClient {
 
-    public static Retrofit sInstance = null;
+    private static Retrofit sInstance = null;
 
     public static Retrofit getInstance() {
         if (sInstance == null) {

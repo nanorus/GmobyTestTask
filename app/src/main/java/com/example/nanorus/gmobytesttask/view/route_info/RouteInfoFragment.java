@@ -36,12 +36,16 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        if (android.os.Build.VERSION.SDK_INT < 23) {
+            super.onAttach(activity);
+        }
     }
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            super.onAttach(context);
+        }
     }
 
     @Override
