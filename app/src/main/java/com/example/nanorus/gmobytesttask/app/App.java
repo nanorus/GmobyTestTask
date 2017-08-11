@@ -24,7 +24,15 @@ public class App extends Application {
     @Override
     protected void finalize() throws Throwable {
         sInstance = null;
+        clearAppComponent();
         super.finalize();
+    }
+
+    @Override
+    public void onTerminate() {
+        sInstance = null;
+        clearAppComponent();
+        super.onTerminate();
     }
 
     private RouteInfoComponent mRouteInfoComponent;
@@ -38,10 +46,18 @@ public class App extends Application {
         return mRouteInfoComponent;
     }
 
+    public void clearRouteInfoComponent() {
+        mRouteInfoComponent = null;
+    }
+
     public RoutesListComponent getRoutesListComponent() {
         if (mRoutesListComponent == null)
             mRoutesListComponent = getAppComponent().plusRoutesListComponent();
         return mRoutesListComponent;
+    }
+
+    public void clearRoutesListComponent() {
+        mRoutesListComponent = null;
     }
 
     public AppComponent getAppComponent() {
@@ -51,4 +67,9 @@ public class App extends Application {
                     .build();
         return mAppComponent;
     }
+
+    public void clearAppComponent() {
+        mAppComponent = null;
+    }
+
 }

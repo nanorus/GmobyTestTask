@@ -52,6 +52,9 @@ public class RouteInfoActivity extends AppCompatActivity implements IRouteInfoAc
     protected void onDestroy() {
         mPresenter.releasePresenter();
         mPresenter = null;
+        if (this.isFinishing()){
+            App.getApp().clearRouteInfoComponent();
+        }
         super.onDestroy();
     }
 }

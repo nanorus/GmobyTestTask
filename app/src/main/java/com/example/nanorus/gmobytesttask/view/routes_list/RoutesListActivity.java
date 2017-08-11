@@ -84,6 +84,9 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
         mPresenter.releasePresenter();
         mPresenter = null;
         hideAlert();
+        if (this.isFinishing()){
+            App.getApp().clearRoutesListComponent();
+        }
         super.onDestroy();
     }
 
