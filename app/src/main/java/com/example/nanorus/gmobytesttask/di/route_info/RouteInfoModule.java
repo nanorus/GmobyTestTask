@@ -12,8 +12,8 @@ import dagger.Module;
 public abstract class RouteInfoModule {
 
     @Binds
-    abstract IRouteInfoFragmentPresenter provideRouteInfoFragmentPresenter(RouteInfoFragmentPresenter routeInfoFragmentPresenter);
+    abstract IRouteInfoFragmentPresenter bindRouteInfoFragmentPresenter(RouteInfoFragmentPresenter routeInfoFragmentPresenter);
 
     @Binds
-    abstract IRouteInfoActivityPresenter provideRouteInfoActivityPresenter(RouteInfoActivityPresenter routeInfoActivityPresenter);
+    abstract IRouteInfoActivityPresenter bindRouteInfoActivityPresenter(RouteInfoActivityPresenter routeInfoActivityPresenter);
 }

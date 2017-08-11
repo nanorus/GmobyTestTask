@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import rx.Completable;
 import rx.Observable;
+import rx.Single;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -29,7 +30,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     private Subscription updateListOnlineSubscription;
     private Subscription updateListOfflineSubscription;
     private Observable<RouteMainInfoPojo> routeMainInfoPojoObservable;
-    private Observable<RequestPojo> requestPojoObservable;
+    private Single<RequestPojo> requestPojoSingle;
     private RequestPojo[] request;
 
     private int mFromDate = 20140101;
@@ -68,27 +69,19 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
         ArrayList<RouteMainInfoPojo> routeMainInfoPojos = new ArrayList<>();
         request = new RequestPojo[1];
 
-        requestPojoObservable = mDataManager.loadRoutesOnline(mFromDate, mToDate)
+        requestPojoSingle = mDataManager.loadRoutesOnline(mFromDate, mToDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        updateListOnlineSubscription = requestPojoObservable.subscribe(
-                requestPojo -> {
+        updateListOnlineSubscription = requestPojoSingle.subscribe(
+                requestPojo->{
                     try {
                         routeMainInfoPojos.addAll(DataConverter.convertFullRoutesListToMainInfoRouteList(requestPojo.getData()));
                         request[0] = requestPojo;
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
-                },
 
-                throwable -> {
-                    throwable.printStackTrace();
-                    mView.hideAlert();
-                    mView.showAlertFailLoading();
-                },
-
-                () -> {
                     isOnlineLoading = false;
                     mView.hideAlert();
                     if (request[0].isSuccess()) {
@@ -100,6 +93,12 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                     } else {
                         mView.showAlertRetryOnlineLoading(mResourceManager.getString(R.string.server_error));
                     }
+
+                },
+                throwable -> {
+                    throwable.printStackTrace();
+                    mView.hideAlert();
+                    mView.showAlertFailLoading();
                 }
         );
     }
