@@ -65,27 +65,14 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
     @Override
     public void onAttach(Activity activity) {
-        if (android.os.Build.VERSION.SDK_INT < 23) {
             try {
                 mActivityEventListener = (RoutesListEventListener) activity;
             } catch (ClassCastException e) {
                 e.printStackTrace();
             }
-        }
         super.onAttach(activity);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-            try {
-                mActivityEventListener = (RoutesListEventListener) context;
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            }
-            super.onAttach(context);
-        }
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
