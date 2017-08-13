@@ -25,10 +25,13 @@ import rx.Observable;
 public class DatabaseManager {
 
     private DatabaseHelper mDatabaseHelper;
+    private DatabaseContract mDatabaseContract;
 
     @Inject
-    DatabaseManager(DatabaseHelper databaseHelper) {
+    DatabaseManager(DatabaseHelper databaseHelper, DatabaseContract databaseContract) {
         mDatabaseHelper = databaseHelper;
+        mDatabaseContract = databaseContract;
+        defineTablesColumnsNames();
     }
 
 
@@ -36,31 +39,32 @@ public class DatabaseManager {
         return mDatabaseHelper;
     }
 
+
     // define names of tables and columns
-    private final static String TABLE_NAME_ROUTES = DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES;
-    private final static String TABLE_NAME_FROM_CITY = DatabaseContract.DatabaseEntry.TABLE_NAME_FROM_CITY;
-    private final static String TABLE_NAME_TO_CITY = DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY;
+    private String TABLE_NAME_ROUTES;
+    private String TABLE_NAME_FROM_CITY;
+    private String TABLE_NAME_TO_CITY;
 
-    private final static String COLUMN_NAME_ROUTES_ID = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_ID;
-    private final static String COLUMN_NAME_ROUTES_FROM_DATE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_DATE;
-    private final static String COLUMN_NAME_ROUTES_TO_DATE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_DATE;
-    private final static String COLUMN_NAME_ROUTES_FROM_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_INFO;
-    private final static String COLUMN_NAME_ROUTES_TO_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_INFO;
-    private final static String COLUMN_NAME_ROUTES_FROM_CITY = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_CITY;
-    private final static String COLUMN_NAME_ROUTES_TO_CITY = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_CITY;
-    private final static String COLUMN_NAME_ROUTES_PRICE = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_PRICE;
-    private final static String COLUMN_NAME_ROUTES_INFO = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_INFO;
-    private final static String COLUMN_NAME_ROUTES_BUS_ID = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_BUS_ID;
-    private final static String COLUMN_NAME_ROUTES_RESERVATION_COUNT = TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_RESERVATION_COUNT;
+    private String COLUMN_NAME_ROUTES_ID;
+    private String COLUMN_NAME_ROUTES_FROM_DATE;
+    private String COLUMN_NAME_ROUTES_TO_DATE;
+    private String COLUMN_NAME_ROUTES_FROM_INFO;
+    private String COLUMN_NAME_ROUTES_TO_INFO;
+    private String COLUMN_NAME_ROUTES_FROM_CITY;
+    private String COLUMN_NAME_ROUTES_TO_CITY;
+    private String COLUMN_NAME_ROUTES_PRICE;
+    private String COLUMN_NAME_ROUTES_INFO;
+    private String COLUMN_NAME_ROUTES_BUS_ID;
+    private String COLUMN_NAME_ROUTES_RESERVATION_COUNT;
 
-    private final static String COLUMN_NAME_FROM_CITY_NAME = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_NAME;
-    private final static String COLUMN_NAME_FROM_CITY_ID = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_ID;
-    private final static String COLUMN_NAME_TO_CITY_NAME = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_NAME;
-    private final static String COLUMN_NAME_FROM_CITY_HIGHLIGHT = TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_HIGHLIGHT;
-    private final static String COLUMN_NAME_TO_CITY_ID = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_ID;
-    private final static String COLUMN_NAME_TO_CITY_HIGHLIGHT = TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_HIGHLIGHT;
+    private String COLUMN_NAME_FROM_CITY_NAME;
+    private String COLUMN_NAME_FROM_CITY_ID;
+    private String COLUMN_NAME_TO_CITY_NAME;
+    private String COLUMN_NAME_FROM_CITY_HIGHLIGHT;
+    private String COLUMN_NAME_TO_CITY_ID;
+    private String COLUMN_NAME_TO_CITY_HIGHLIGHT;
 
-    private final static String COMMA_SEP = ",";
+    private final String COMMA_SEP = ",";
 
     public void putRoutes(RequestPojo routesFullInfo) {
         try {
@@ -75,11 +79,11 @@ public class DatabaseManager {
             for (int i = 0; i < routesFullInfo.getData().size(); i++) {
                 fromCityPojo = routesFullInfo.getData().get(i).getFromCity();
 
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_ID, fromCityPojo.getId());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_HIGHLIGHT, fromCityPojo.getHighlight());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_NAME, fromCityPojo.getName());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_FROM_CITY_ID, fromCityPojo.getId());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_FROM_CITY_HIGHLIGHT, fromCityPojo.getHighlight());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_FROM_CITY_NAME, fromCityPojo.getName());
 
-                database.insertWithOnConflict(DatabaseContract.DatabaseEntry.TABLE_NAME_FROM_CITY,
+                database.insertWithOnConflict(mDatabaseContract.TABLE_NAME_FROM_CITY,
                         null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
 
                 contentValues.clear();
@@ -90,12 +94,12 @@ public class DatabaseManager {
             for (int i = 0; i < routesFullInfo.getData().size(); i++) {
                 toCityPojo = routesFullInfo.getData().get(i).getToCity();
 
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_ID, toCityPojo.getId());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_HIGHLIGHT, toCityPojo.getHighlight());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_NAME, toCityPojo.getName());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_TO_CITY_ID, toCityPojo.getId());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_TO_CITY_HIGHLIGHT, toCityPojo.getHighlight());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_TO_CITY_NAME, toCityPojo.getName());
 
 
-                database.insertWithOnConflict(DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY,
+                database.insertWithOnConflict(mDatabaseContract.TABLE_NAME_TO_CITY,
                         null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 contentValues.clear();
             }
@@ -105,21 +109,21 @@ public class DatabaseManager {
             for (int i = 0; i < routesFullInfo.getData().size(); i++) {
                 datumPojo = routesFullInfo.getData().get(i);
 
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_ID, datumPojo.getId());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_CITY, datumPojo.getFromCity().getId());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_CITY, datumPojo.getToCity().getId());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_DATE,
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_ID, datumPojo.getId());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_FROM_CITY, datumPojo.getFromCity().getId());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_TO_CITY, datumPojo.getToCity().getId());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_FROM_DATE,
                         datumPojo.getFromDate() + " " + datumPojo.getFromTime());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_DATE,
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_TO_DATE,
                         datumPojo.getToDate() + " " + datumPojo.getToTime());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_PRICE, datumPojo.getPrice());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_INFO, datumPojo.getFromInfo());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_INFO, datumPojo.getToInfo());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_INFO, datumPojo.getInfo());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_BUS_ID, datumPojo.getBusId());
-                contentValues.put(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_RESERVATION_COUNT, datumPojo.getReservationCount());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_PRICE, datumPojo.getPrice());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_FROM_INFO, datumPojo.getFromInfo());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_TO_INFO, datumPojo.getToInfo());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_INFO, datumPojo.getInfo());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_BUS_ID, datumPojo.getBusId());
+                contentValues.put(mDatabaseContract.COLUMN_NAME_ROUTES_RESERVATION_COUNT, datumPojo.getReservationCount());
 
-                database.insertWithOnConflict(DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES,
+                database.insertWithOnConflict(mDatabaseContract.TABLE_NAME_ROUTES,
                         null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
 
                 contentValues.clear();
@@ -148,15 +152,15 @@ public class DatabaseManager {
                                     COLUMN_NAME_FROM_CITY_NAME + " AS FromCity" + COMMA_SEP +
                                     COLUMN_NAME_TO_CITY_NAME + " AS ToCity" +
 
-                                    " FROM " + DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES +
+                                    " FROM " + mDatabaseContract.TABLE_NAME_ROUTES +
 
                                     " INNER JOIN " + TABLE_NAME_FROM_CITY + " ON " +
-                                    TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_CITY + " = " +
-                                    TABLE_NAME_FROM_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_FROM_CITY_ID +
+                                    TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_FROM_CITY + " = " +
+                                    TABLE_NAME_FROM_CITY + "." + mDatabaseContract.COLUMN_NAME_FROM_CITY_ID +
 
                                     " INNER JOIN " + TABLE_NAME_TO_CITY + " ON " +
-                                    TABLE_NAME_ROUTES + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_CITY + " = " +
-                                    TABLE_NAME_TO_CITY + "." + DatabaseContract.DatabaseEntry.COLUMN_NAME_TO_CITY_ID
+                                    TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_TO_CITY + " = " +
+                                    TABLE_NAME_TO_CITY + "." + mDatabaseContract.COLUMN_NAME_TO_CITY_ID
                             , null);
                     if (cursor.moveToFirst()) {
                         do {
@@ -258,23 +262,23 @@ public class DatabaseManager {
                     toCityName = cursor.getString(cursor.getColumnIndex("toCityName"));
 
                     try {
-                        dateFrom = dateFormatDataBase.parse(cursor.getString(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_DATE)));
-                        dateTo = dateFormatDataBase.parse(cursor.getString(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_DATE)));
+                        dateFrom = dateFormatDataBase.parse(cursor.getString(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_FROM_DATE)));
+                        dateTo = dateFormatDataBase.parse(cursor.getString(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_TO_DATE)));
                     } catch (ParseException e) {
-                        fromDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_DATE));
-                        toDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_DATE));
+                        fromDate = cursor.getString(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_FROM_DATE));
+                        toDate = cursor.getString(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_TO_DATE));
                         e.printStackTrace();
                     }
                     fromDate = dateFormatPojo.format(dateFrom);
                     toDate = dateFormatPojo.format(dateTo);
                     fromTime = timeFormatPojo.format(dateFrom);
                     toTime = timeFormatPojo.format(dateTo);
-                    fromInfo = cursor.getString(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_FROM_INFO));
-                    toInfo = cursor.getString(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_TO_INFO));
-                    info = cursor.getString(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_INFO));
-                    price = cursor.getInt(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_PRICE));
-                    busId = cursor.getInt(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_BUS_ID));
-                    reservationCount = cursor.getInt(cursor.getColumnIndex(DatabaseContract.DatabaseEntry.COLUMN_NAME_ROUTES_RESERVATION_COUNT));
+                    fromInfo = cursor.getString(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_FROM_INFO));
+                    toInfo = cursor.getString(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_TO_INFO));
+                    info = cursor.getString(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_INFO));
+                    price = cursor.getInt(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_PRICE));
+                    busId = cursor.getInt(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_BUS_ID));
+                    reservationCount = cursor.getInt(cursor.getColumnIndex(mDatabaseContract.COLUMN_NAME_ROUTES_RESERVATION_COUNT));
 
                 } while (cursor.moveToNext());
             }
@@ -292,11 +296,33 @@ public class DatabaseManager {
 
     public void cleanSavedRoutes() {
         SQLiteDatabase db = getDatabaseHelper().getWritableDatabase();
-        db.delete(DatabaseContract.DatabaseEntry.TABLE_NAME_ROUTES, null, null);
-        db.delete(DatabaseContract.DatabaseEntry.TABLE_NAME_FROM_CITY, null, null);
-        db.delete(DatabaseContract.DatabaseEntry.TABLE_NAME_TO_CITY, null, null);
+        db.delete(mDatabaseContract.TABLE_NAME_ROUTES, null, null);
+        db.delete(mDatabaseContract.TABLE_NAME_FROM_CITY, null, null);
+        db.delete(mDatabaseContract.TABLE_NAME_TO_CITY, null, null);
     }
 
+    private void defineTablesColumnsNames() {
+        TABLE_NAME_ROUTES = mDatabaseContract.TABLE_NAME_ROUTES;
+        TABLE_NAME_FROM_CITY = mDatabaseContract.TABLE_NAME_FROM_CITY;
+        TABLE_NAME_TO_CITY = mDatabaseContract.TABLE_NAME_TO_CITY;
+        COLUMN_NAME_ROUTES_ID = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_ID;
+        COLUMN_NAME_ROUTES_FROM_DATE = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_FROM_DATE;
+        COLUMN_NAME_ROUTES_TO_DATE = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_TO_DATE;
+        COLUMN_NAME_ROUTES_FROM_INFO = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_FROM_INFO;
+        COLUMN_NAME_ROUTES_TO_INFO = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_TO_INFO;
+        COLUMN_NAME_ROUTES_FROM_CITY = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_FROM_CITY;
+        COLUMN_NAME_ROUTES_TO_CITY = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_TO_CITY;
+        COLUMN_NAME_ROUTES_PRICE = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_PRICE;
+        COLUMN_NAME_ROUTES_INFO = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_INFO;
+        COLUMN_NAME_ROUTES_BUS_ID = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_BUS_ID;
+        COLUMN_NAME_ROUTES_RESERVATION_COUNT = TABLE_NAME_ROUTES + "." + mDatabaseContract.COLUMN_NAME_ROUTES_RESERVATION_COUNT;
+        COLUMN_NAME_FROM_CITY_NAME = TABLE_NAME_FROM_CITY + "." + mDatabaseContract.COLUMN_NAME_FROM_CITY_NAME;
+        COLUMN_NAME_FROM_CITY_ID = TABLE_NAME_FROM_CITY + "." + mDatabaseContract.COLUMN_NAME_FROM_CITY_ID;
+        COLUMN_NAME_TO_CITY_NAME = TABLE_NAME_TO_CITY + "." + mDatabaseContract.COLUMN_NAME_TO_CITY_NAME;
+        COLUMN_NAME_FROM_CITY_HIGHLIGHT = TABLE_NAME_FROM_CITY + "." + mDatabaseContract.COLUMN_NAME_FROM_CITY_HIGHLIGHT;
+        COLUMN_NAME_TO_CITY_ID = TABLE_NAME_TO_CITY + "." + mDatabaseContract.COLUMN_NAME_TO_CITY_ID;
+        COLUMN_NAME_TO_CITY_HIGHLIGHT = TABLE_NAME_TO_CITY + "." + mDatabaseContract.COLUMN_NAME_TO_CITY_HIGHLIGHT;
+    }
     @Override
     protected void finalize() throws Throwable {
         getDatabaseHelper().close();

@@ -10,19 +10,22 @@ import javax.inject.Singleton;
 @Singleton
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private DatabaseContract mDatabaseContract;
+
     private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "RoutesDatabase2.db";
+    private static final String DB_NAME = "RoutesDatabase.db";
 
     @Inject
-    DatabaseHelper(Context context) {
+    DatabaseHelper(Context context, DatabaseContract databaseContract) {
         super(context, DB_NAME, null, DB_VERSION);
+        mDatabaseContract = databaseContract;
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DatabaseContract.DatabaseEntry.SQL_CREATE_TABLE_FROM_CITY);
-        sqLiteDatabase.execSQL(DatabaseContract.DatabaseEntry.SQL_CREATE_TABLE_TO_CITY);
-        sqLiteDatabase.execSQL(DatabaseContract.DatabaseEntry.SQL_CREATE_TABLE_ROUTES);
+        sqLiteDatabase.execSQL(mDatabaseContract.SQL_CREATE_TABLE_FROM_CITY);
+        sqLiteDatabase.execSQL(mDatabaseContract.SQL_CREATE_TABLE_TO_CITY);
+        sqLiteDatabase.execSQL(mDatabaseContract.SQL_CREATE_TABLE_ROUTES);
     }
 
     @Override
