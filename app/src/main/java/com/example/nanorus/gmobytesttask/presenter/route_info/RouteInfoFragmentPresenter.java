@@ -1,6 +1,6 @@
 package com.example.nanorus.gmobytesttask.presenter.route_info;
 
-import com.example.nanorus.gmobytesttask.model.DataConverter;
+import com.example.nanorus.gmobytesttask.model.DataMapper;
 import com.example.nanorus.gmobytesttask.model.DataManager;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
 import com.example.nanorus.gmobytesttask.view.route_info.IRouteInfoFragment;
@@ -18,10 +18,12 @@ public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
     private Subscription getRouteFullInfoSubscription;
 
     private DataManager mDataManager;
+    private DataMapper mDataMapper;
 
     @Inject
-    RouteInfoFragmentPresenter(DataManager dataManager) {
+    RouteInfoFragmentPresenter(DataManager dataManager, DataMapper dataMapper) {
         mDataManager = dataManager;
+        mDataMapper = dataMapper;
     }
 
     @Override
@@ -33,11 +35,11 @@ public class RouteInfoFragmentPresenter implements IRouteInfoFragmentPresenter {
                 datumPojo -> {
                     // call mView showing methods
                     mView.setFromCityField(datumPojo.getFromCity().getName());
-                    mView.setFromDateField(DataConverter.convertApiDateFormatToCorrectDateFormat(
+                    mView.setFromDateField(mDataMapper.apiDateFormatToCorrectDateFormat(
                             datumPojo.getFromDate() + " " + datumPojo.getFromTime()));
                     mView.setFromInfoField(datumPojo.getFromInfo());
                     mView.setToCityField(datumPojo.getToCity().getName());
-                    mView.setToDateField(DataConverter.convertApiDateFormatToCorrectDateFormat(
+                    mView.setToDateField(mDataMapper.apiDateFormatToCorrectDateFormat(
                             datumPojo.getToDate() + " " + datumPojo.getToTime()));
                     mView.setToInfoField(datumPojo.getToInfo());
                     mView.setPriceField(String.valueOf(datumPojo.getPrice()));

@@ -1,7 +1,7 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.model.DataConverter;
+import com.example.nanorus.gmobytesttask.model.DataMapper;
 import com.example.nanorus.gmobytesttask.model.DataManager;
 import com.example.nanorus.gmobytesttask.model.ResourceManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
@@ -46,15 +46,17 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     private RoutesListRouter mRoutesListRouter;
     private DataManager mDataManager;
     private InternetConnection mInternetConnection;
+    private DataMapper mDataMapper;
 
     @Inject
     public RoutesListFragmentPresenter(ResourceManager resourceManager,
                                        RoutesListRouter routesListRouter, DataManager dataManager,
-                                       InternetConnection internetConnection) {
+                                       InternetConnection internetConnection, DataMapper dataMapper) {
         mResourceManager = resourceManager;
         mRoutesListRouter = routesListRouter;
         mDataManager = dataManager;
         mInternetConnection = internetConnection;
+        mDataMapper = dataMapper;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
         updateListOnlineSubscription = requestPojoSingle.subscribe(
                 requestPojo->{
                     try {
-                        routeMainInfoPojos.addAll(DataConverter.convertFullRoutesListToMainInfoRouteList(requestPojo.getData()));
+                        routeMainInfoPojos.addAll(mDataMapper.fullRoutesListToMainInfoRouteList(requestPojo.getData()));
                         request[0] = requestPojo;
                     } catch (NullPointerException e) {
                         e.printStackTrace();

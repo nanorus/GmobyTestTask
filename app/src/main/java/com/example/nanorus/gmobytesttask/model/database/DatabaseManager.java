@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.nanorus.gmobytesttask.model.DataConverter;
+import com.example.nanorus.gmobytesttask.model.DataMapper;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.FromCityPojo;
@@ -26,11 +26,13 @@ public class DatabaseManager {
 
     private DatabaseHelper mDatabaseHelper;
     private DatabaseContract mDatabaseContract;
+    private DataMapper mDataMapper;
 
     @Inject
-    DatabaseManager(DatabaseHelper databaseHelper, DatabaseContract databaseContract) {
+    DatabaseManager(DatabaseHelper databaseHelper, DatabaseContract databaseContract, DataMapper dataMapper) {
         mDatabaseHelper = databaseHelper;
         mDatabaseContract = databaseContract;
+        mDataMapper = dataMapper;
         defineTablesColumnsNames();
     }
 
@@ -128,10 +130,6 @@ public class DatabaseManager {
 
                 contentValues.clear();
             }
-            datumPojo = null;
-
-            // database = null;
-            // super.run();
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -168,8 +166,8 @@ public class DatabaseManager {
                                     cursor.getInt(cursor.getColumnIndex("Id")),
                                     cursor.getString(cursor.getColumnIndex("FromCity")),
                                     cursor.getString(cursor.getColumnIndex("ToCity")),
-                                    DataConverter.convertApiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("FromDate"))),
-                                    DataConverter.convertApiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("ToDate"))),
+                                    mDataMapper.apiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("FromDate"))),
+                                    mDataMapper.apiDateFormatToCorrectDateFormat(cursor.getString(cursor.getColumnIndex("ToDate"))),
                                     cursor.getInt(cursor.getColumnIndex("Price"))
                             );
                             subscriber.onNext(routeMainInfoPojo);
