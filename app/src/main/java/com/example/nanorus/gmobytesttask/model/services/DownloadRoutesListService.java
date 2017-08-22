@@ -74,12 +74,10 @@ public class DownloadRoutesListService extends Service {
                 Intent intent = new Intent(BROADCAST_ACTION);
                 intent.putExtra("is_data_downloaded", true);
                 mContext.sendBroadcast(intent);
-
+                DownloadRoutesListService.this.stopSelf();
             }
         }
                 .execute("http://projects.gmoby.org/web/index.php/api/trips?from_date=20140101&to_date=20180501");
-
-
         return super.onStartCommand(intent, flags, startId);
     }
 
