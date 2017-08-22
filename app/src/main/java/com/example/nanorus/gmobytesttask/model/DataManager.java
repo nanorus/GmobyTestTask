@@ -5,6 +5,8 @@ import com.example.nanorus.gmobytesttask.model.database.DatabaseManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,11 +19,18 @@ public class DataManager {
 
     private DatabaseManager mDatabaseManager;
     private GetAllRoutersService mGetAllRoutersService;
+    private ServiceManager mServiceManager;
 
     @Inject
-    public DataManager(DatabaseManager databaseManager, GetAllRoutersService getAllRoutersService) {
+    public DataManager(DatabaseManager databaseManager, GetAllRoutersService getAllRoutersService,
+                       ServiceManager serviceManager) {
         mDatabaseManager = databaseManager;
         mGetAllRoutersService = getAllRoutersService;
+        mServiceManager = serviceManager;
+    }
+
+    public Single<Boolean> loadRoutesOnlineFromService(int fromDate, int toDate) {
+        return mServiceManager.loadRoutesList();
     }
 
     public Single<RequestPojo> loadRoutesOnline(int fromDate, int toDate) {
@@ -42,6 +51,14 @@ public class DataManager {
 
     public void cleanSavedRoutes() {
         mDatabaseManager.cleanSavedRoutes();
+    }
+
+    public RequestPojo getRoutesRequestFromService(){
+        String json = mServiceManager.getRoutesListResponseJson();
+
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(json, RequestPojo.class);
+
     }
 
 }

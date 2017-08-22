@@ -6,9 +6,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.app.App;
-import com.example.nanorus.gmobytesttask.app.bus.EventBus;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.IRoutesListActivityPresenter;
 
 import javax.inject.Inject;
@@ -29,7 +28,7 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
-        EventBus.getInstance().register(this);
+
 
         routesListFragment = (RoutesListFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_routes_list);

@@ -4,6 +4,8 @@ public interface IRoutesListFragmentPresenter {
 
     void updateListOnline();
 
+    void updateListOnlineService();
+
     void updateListOffline();
 
     void onListItemClicked();

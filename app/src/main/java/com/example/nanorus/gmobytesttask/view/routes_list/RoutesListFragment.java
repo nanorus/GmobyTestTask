@@ -44,7 +44,8 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     private int mListItemClickedPosition = 0;
 
     public void updateListOnline() {
-        mPresenter.updateListOnline();
+       // mPresenter.updateListOnline();
+        mPresenter.updateListOnlineService();
     }
 
     public void updateListOffline() {

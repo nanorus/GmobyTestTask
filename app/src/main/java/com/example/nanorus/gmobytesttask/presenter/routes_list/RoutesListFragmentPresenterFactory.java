@@ -1,6 +1,6 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
-import com.example.nanorus.gmobytesttask.app.App;
+import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.presenter.base.PresenterFactory;
 
 import javax.inject.Inject;

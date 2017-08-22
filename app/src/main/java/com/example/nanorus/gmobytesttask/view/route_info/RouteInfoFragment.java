@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.app.App;
+import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.presenter.route_info.IRouteInfoFragmentPresenter;
 
 import javax.inject.Inject;

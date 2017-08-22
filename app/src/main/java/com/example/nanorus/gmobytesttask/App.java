@@ -1,4 +1,4 @@
-package com.example.nanorus.gmobytesttask.app;
+package com.example.nanorus.gmobytesttask;
 
 
 import android.app.Application;

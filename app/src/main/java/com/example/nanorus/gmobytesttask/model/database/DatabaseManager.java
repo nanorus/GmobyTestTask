@@ -28,6 +28,7 @@ public class DatabaseManager {
     private DatabaseContract mDatabaseContract;
     private DataMapper mDataMapper;
 
+
     @Inject
     DatabaseManager(DatabaseHelper databaseHelper, DatabaseContract databaseContract, DataMapper dataMapper) {
         mDatabaseHelper = databaseHelper;

@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.app.App;
+import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.presenter.route_info.IRouteInfoActivityPresenter;
 
 import javax.inject.Inject;

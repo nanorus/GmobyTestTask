@@ -1,8 +1,8 @@
 package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
 import com.example.nanorus.gmobytesttask.R;
-import com.example.nanorus.gmobytesttask.model.DataMapper;
 import com.example.nanorus.gmobytesttask.model.DataManager;
+import com.example.nanorus.gmobytesttask.model.DataMapper;
 import com.example.nanorus.gmobytesttask.model.ResourceManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
@@ -27,10 +27,12 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     private IRoutesListFragment mView;
 
-    private Subscription updateListOnlineSubscription;
+    private Subscription mUpdateListOnlineSubscription;
+    private Subscription mUpdateListOnlineServiceSubscription;
     private Subscription updateListOfflineSubscription;
     private Observable<RouteMainInfoPojo> routeMainInfoPojoObservable;
     private Single<RequestPojo> requestPojoSingle;
+    private Single<Boolean> mIsServiceRequestSuccessfullSingle;
     private RequestPojo[] request;
 
     private int mFromDate = 20140101;
@@ -60,10 +62,46 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     }
 
     @Override
+    public void updateListOnlineService() {
+        isOnlineLoading = true;
+        mIsServiceRequestSuccessfullSingle = mDataManager.loadRoutesOnlineFromService(mFromDate, mToDate);
+        if (mUpdateListOnlineServiceSubscription != null && !mUpdateListOnlineServiceSubscription.isUnsubscribed()) {
+            mUpdateListOnlineServiceSubscription.unsubscribe();
+        }
+        mView.showAlertLoading();
+
+        mUpdateListOnlineServiceSubscription = mIsServiceRequestSuccessfullSingle
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    isOnlineLoading = false;
+                    if (aBoolean) {
+                        mView.showAlertInsert();
+
+                        Completable.create(completableSubscriber -> {
+                            System.out.println("presenter: online loaded. start db input ");
+                            mDataManager.saveRoutes(mDataManager.getRoutesRequestFromService());
+                            completableSubscriber.onCompleted();
+                        })
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> {
+                                    System.out.println("presenter: start offline load");
+                                    updateListOffline();
+                                    mView.hideAlert();
+                                });
+                    } else {
+                        // error
+                    }
+                });
+
+    }
+
+    @Override
     public void updateListOnline() {
         isOnlineLoading = true;
-        if (updateListOnlineSubscription != null && !updateListOnlineSubscription.isUnsubscribed()) {
-            updateListOnlineSubscription.unsubscribe();
+        if (mUpdateListOnlineSubscription != null && !mUpdateListOnlineSubscription.isUnsubscribed()) {
+            mUpdateListOnlineSubscription.unsubscribe();
         }
 
         mView.showAlertLoading();
@@ -75,8 +113,8 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        updateListOnlineSubscription = requestPojoSingle.subscribe(
-                requestPojo->{
+        mUpdateListOnlineSubscription = requestPojoSingle.subscribe(
+                requestPojo -> {
                     try {
                         routeMainInfoPojos.addAll(mDataMapper.fullRoutesListToMainInfoRouteList(requestPojo.getData()));
                         request[0] = requestPojo;
@@ -137,8 +175,10 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
 
     @Override
     public void releasePresenter() {
-        if (updateListOnlineSubscription != null && !updateListOnlineSubscription.isUnsubscribed())
-            updateListOnlineSubscription.unsubscribe();
+        if (mUpdateListOnlineServiceSubscription != null && !mUpdateListOnlineServiceSubscription.isUnsubscribed())
+            mUpdateListOnlineServiceSubscription.unsubscribe();
+        if (mUpdateListOnlineSubscription != null && !mUpdateListOnlineSubscription.isUnsubscribed())
+            mUpdateListOnlineSubscription.unsubscribe();
         if (updateListOfflineSubscription != null && !updateListOfflineSubscription.isUnsubscribed())
             updateListOfflineSubscription.unsubscribe();
     }

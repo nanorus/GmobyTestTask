@@ -2,6 +2,10 @@ package com.example.nanorus.gmobytesttask.di.model;
 
 import com.example.nanorus.gmobytesttask.model.api.service.GetAllRoutersService;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -26,6 +30,21 @@ public class ModelModule {
     @Singleton
     GetAllRoutersService provideGetAllRoutesService(Retrofit routesRetroClient){
         return routesRetroClient.create(GetAllRoutersService.class);
+    }
+
+    @Provides
+    @Singleton
+    HttpURLConnection provideHttpURLConnection(String fromDate, String toDate){
+        String url = "http://projects.gmoby.org/web/index.php/api/";
+
+        URL obj = null;
+        try {
+            obj = new URL(url);
+            return (HttpURLConnection) obj.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
