@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.model.DataManager;
@@ -90,7 +91,7 @@ public class DownloadRoutesListService extends Service {
                 super.onPostExecute(isSuccessful);
                 Intent intent = new Intent(BROADCAST_ACTION);
                 intent.putExtra("is_data_downloaded", true);
-                mContext.sendBroadcast(intent);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
                 DownloadRoutesListService.this.stopSelf();
             }
         }

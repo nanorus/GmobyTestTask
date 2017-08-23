@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.nanorus.gmobytesttask.model.services.DownloadRoutesListService;
 
@@ -31,12 +32,11 @@ public class ServiceManager {
                 public void onReceive(Context context, Intent intent) {
                     System.out.println("onRecieve answer: " + intent.getBooleanExtra("is_data_downloaded", false));
                     singleSubscriber.onSuccess(intent.getBooleanExtra("is_data_downloaded", false));
-
                 }
             };
 
             IntentFilter intFilt = new IntentFilter(DownloadRoutesListService.BROADCAST_ACTION);
-            mContext.registerReceiver(mBroadcastReceiver, intFilt);
+            LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver, intFilt);
             mContext.startService(new Intent(mContext, DownloadRoutesListService.class));
         });
     }
