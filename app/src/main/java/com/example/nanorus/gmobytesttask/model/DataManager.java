@@ -5,8 +5,6 @@ import com.example.nanorus.gmobytesttask.model.database.DatabaseManager;
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -53,12 +51,6 @@ public class DataManager {
         mDatabaseManager.cleanSavedRoutes();
     }
 
-    public RequestPojo getRoutesRequestFromService(){
-        String json = mServiceManager.getRoutesListResponseJson();
 
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(json, RequestPojo.class);
-
-    }
 
 }

@@ -2,6 +2,8 @@ package com.example.nanorus.gmobytesttask.model;
 
 import com.example.nanorus.gmobytesttask.model.pojo.RouteMainInfoPojo;
 import com.example.nanorus.gmobytesttask.model.pojo.api.DatumPojo;
+import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
+import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,17 +12,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 public class DataMapper {
 
-    @Inject
-    public DataMapper() {
+    Gson mGson;
+
+    public DataMapper(Gson gson) {
+        mGson = gson;
     }
 
-    public String apiDateFormatToCorrectDateFormat(String apiDateString){
+    public String apiDateFormatToCorrectDateFormat(String apiDateString) {
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         Date date = null;
         try {
@@ -49,5 +50,10 @@ public class DataMapper {
         }
         return routeMainInfoPojos;
     }
+
+    public RequestPojo jsonToRequestPojo(String json) {
+        return mGson.fromJson(json, RequestPojo.class);
+    }
+
 
 }

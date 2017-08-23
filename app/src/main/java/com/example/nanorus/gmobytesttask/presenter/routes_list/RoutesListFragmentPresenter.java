@@ -76,20 +76,11 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
                 .subscribe(aBoolean -> {
                     isOnlineLoading = false;
                     if (aBoolean) {
-                        mView.showAlertInsert();
+                        //    mView.showAlertInsert();
 
-                        Completable.create(completableSubscriber -> {
-                            System.out.println("presenter: online loaded. start db input ");
-                            mDataManager.saveRoutes(mDataManager.getRoutesRequestFromService());
-                            completableSubscriber.onCompleted();
-                        })
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(() -> {
-                                    System.out.println("presenter: start offline load");
-                                    updateListOffline();
-                                    mView.hideAlert();
-                                });
+                        System.out.println("presenter: start offline load");
+                        updateListOffline();
+                        mView.hideAlert();
                     } else {
                         // error
                     }

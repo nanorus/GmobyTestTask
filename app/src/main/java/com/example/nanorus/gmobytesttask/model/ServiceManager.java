@@ -40,8 +40,6 @@ public class ServiceManager {
             mContext.startService(new Intent(mContext, DownloadRoutesListService.class));
         });
     }
-    public String getRoutesListResponseJson(){
-        return DownloadRoutesListService.getResponse();
-    }
+
 
 }

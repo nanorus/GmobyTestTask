@@ -8,6 +8,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.example.nanorus.gmobytesttask.App;
+import com.example.nanorus.gmobytesttask.model.DataManager;
+import com.example.nanorus.gmobytesttask.model.DataMapper;
+import com.example.nanorus.gmobytesttask.model.pojo.api.RequestPojo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,16 +18,26 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 
 public class DownloadRoutesListService extends Service {
 
     public static String BROADCAST_ACTION = "com.example.nanorus.gmobytesttask.action.ROUTES_DOWNLOADED";
-    public static String mResponse = null;
 
+    @Inject
     Context mContext;
+    @Inject
+    DataMapper mDataMapper;
+    @Inject
+    DataManager mDataManager;
+
+    AsyncTask<String, Void, Boolean> mRequestAsyncTask;
+
 
     public DownloadRoutesListService() {
-        mContext = App.getApp().getApplicationContext();
+        App.getApp().getAppComponent().inject(this);
+        App.getApp().getDataManagerComponent().inject(this);
     }
 
 
@@ -37,9 +50,9 @@ public class DownloadRoutesListService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        new AsyncTask<String, Void, String>() {
+        mRequestAsyncTask = new AsyncTask<String, Void, Boolean>() {
             @Override
-            protected String doInBackground(String... strings) {
+            protected Boolean doInBackground(String... strings) {
                 String url = strings[0];
 
                 URL obj;
@@ -47,30 +60,34 @@ public class DownloadRoutesListService extends Service {
                 BufferedReader in;
                 String inputLine;
                 StringBuilder response = new StringBuilder();
-                try {
-                    obj = new URL(url);
-                    con = (HttpURLConnection) obj.openConnection();
-                    con.setRequestMethod("GET");
-                    in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                if (!isCancelled()) {
+                    try {
+                        obj = new URL(url);
+                        con = (HttpURLConnection) obj.openConnection();
+                        con.setRequestMethod("GET");
+                        in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
 
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    // save response to db
+                    RequestPojo requestPojo = mDataMapper.jsonToRequestPojo(response.toString());
+                    mDataManager.saveRoutes(requestPojo);
 
-
-                return response.toString();
+                    return true;
+                } else
+                    return false;
             }
 
             @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                setResponse(s);
-
+            protected void onPostExecute(Boolean isSuccessful) {
+                super.onPostExecute(isSuccessful);
                 Intent intent = new Intent(BROADCAST_ACTION);
                 intent.putExtra("is_data_downloaded", true);
                 mContext.sendBroadcast(intent);
@@ -84,6 +101,7 @@ public class DownloadRoutesListService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mRequestAsyncTask.cancel(false);
     }
 
     @Nullable
@@ -92,11 +110,4 @@ public class DownloadRoutesListService extends Service {
         return null;
     }
 
-    public static String getResponse() {
-        return mResponse;
-    }
-
-    public static void setResponse(String mResponse) {
-        DownloadRoutesListService.mResponse = mResponse;
-    }
 }
