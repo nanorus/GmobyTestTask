@@ -7,6 +7,7 @@ import com.example.nanorus.gmobytesttask.di.app.AppComponent;
 import com.example.nanorus.gmobytesttask.di.app.AppModule;
 import com.example.nanorus.gmobytesttask.di.app.DaggerAppComponent;
 import com.example.nanorus.gmobytesttask.di.manager.DataManagerComponent;
+import com.example.nanorus.gmobytesttask.di.profile.ProfileComponent;
 import com.example.nanorus.gmobytesttask.di.route_info.RouteInfoComponent;
 import com.example.nanorus.gmobytesttask.di.routes_list.RoutesListComponent;
 
@@ -40,6 +41,7 @@ public class App extends Application {
     private RouteInfoComponent mRouteInfoComponent;
     private RoutesListComponent mRoutesListComponent;
     private DataManagerComponent mDataManagerComponent;
+    private ProfileComponent mProfileComponent;
 
     public AppComponent getAppComponent() {
         if (mAppComponent == null)
@@ -77,6 +79,15 @@ public class App extends Application {
     }
     public void clearDataManagerComponent() {
         mDataManagerComponent = null;
+    }
+
+    public ProfileComponent getProfileComponent() {
+        if (mProfileComponent == null)
+            mProfileComponent = getAppComponent().plusProfileComponent();
+        return mProfileComponent;
+    }
+    public void clearProfileComponent() {
+        mProfileComponent = null;
     }
 
 

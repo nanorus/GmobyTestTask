@@ -73,14 +73,15 @@ public class DownloadRoutesListService extends Service {
                         }
 
                         in.close();
+
+                        // save response to db
+                        RequestPojo requestPojo = mDataMapper.jsonToRequestPojo(response.toString());
+                        mDataManager.cleanSavedRoutes();
+                        mDataManager.saveRoutes(requestPojo);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        mDataManager.cleanSavedRoutes();
                     }
-
-                    // save response to db
-                    RequestPojo requestPojo = mDataMapper.jsonToRequestPojo(response.toString());
-                    mDataManager.saveRoutes(requestPojo);
-
                     return true;
                 } else
                     return false;

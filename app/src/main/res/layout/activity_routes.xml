@@ -22,7 +22,20 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/route_schedule"/>
+                android:text="@string/route_schedule"
+                android:layout_alignBaseline="@+id/activity_routes_tb_btn_profile"
+                android:layout_alignBottom="@+id/activity_routes_tb_btn_profile"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+            <Button
+                android:id="@+id/activity_routes_tb_btn_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="профиль"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
     <View

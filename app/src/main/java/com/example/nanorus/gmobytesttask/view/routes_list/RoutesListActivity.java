@@ -1,10 +1,12 @@
 package com.example.nanorus.gmobytesttask.view.routes_list;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
 
 import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.R;
@@ -15,6 +17,7 @@ import javax.inject.Inject;
 public class RoutesListActivity extends AppCompatActivity implements IRoutesListActivity, RoutesListFragment.RoutesListEventListener {
 
     private SwipeRefreshLayout activity_routes_swipe;
+    private Button activity_routes_tb_btn_profile;
 
     @Inject
     IRoutesListActivityPresenter mPresenter;
@@ -29,6 +32,10 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
 
+        activity_routes_tb_btn_profile = (Button) findViewById(R.id.activity_routes_tb_btn_profile);
+        activity_routes_tb_btn_profile.setOnClickListener(view -> {
+            mPresenter.onProfileClicked();
+        });
 
         routesListFragment = (RoutesListFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_routes_list);
@@ -68,6 +75,11 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
 
     @Override
     public IRoutesListActivity getView() {
+        return this;
+    }
+
+    @Override
+    public Context getViewContext() {
         return this;
     }
 

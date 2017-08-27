@@ -2,6 +2,7 @@ package com.example.nanorus.gmobytesttask.presenter.routes_list;
 
 import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.model.ResourceManager;
+import com.example.nanorus.gmobytesttask.router.RoutesListRouter;
 import com.example.nanorus.gmobytesttask.utils.InternetConnection;
 import com.example.nanorus.gmobytesttask.view.routes_list.IRoutesListActivity;
 
@@ -13,12 +14,20 @@ public class RoutesListActivityPresenter implements IRoutesListActivityPresenter
 
     private ResourceManager mResourceManager;
     private InternetConnection mInternetConnection;
+    private RoutesListRouter mRoutesListRouter;
 
     @Inject
     public RoutesListActivityPresenter(ResourceManager resourceManager,
-                                       InternetConnection internetConnection) {
+                                       InternetConnection internetConnection,
+                                       RoutesListRouter routesListRouter) {
         mResourceManager = resourceManager;
         mInternetConnection = internetConnection;
+        mRoutesListRouter = routesListRouter;
+    }
+
+    @Override
+    public void onProfileClicked() {
+        mRoutesListRouter.navigateToProfileActivity(mView.getViewContext());
     }
 
     @Override
