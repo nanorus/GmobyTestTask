@@ -4,6 +4,8 @@ import android.content.Context;
 
 public interface IProfileActivity {
 
+    void autoFocus();
+
     void takePhoto();
 
     Context getViewContext();

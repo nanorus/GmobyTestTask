@@ -19,7 +19,7 @@
     <SurfaceView
         android:id="@+id/activity_profile_sv_photo"
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"

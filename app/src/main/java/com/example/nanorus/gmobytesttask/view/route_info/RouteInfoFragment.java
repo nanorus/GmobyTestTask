@@ -10,14 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.App;
+import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.presenter.route_info.IRouteInfoFragmentPresenter;
 
 import javax.inject.Inject;
 
 
 public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
+
+    public static RouteInfoFragment newInstance(int id) {
+        RouteInfoFragment routeInfoFragment = new RouteInfoFragment();
+        Bundle args = new Bundle();
+        args.putInt("id", id);
+        routeInfoFragment.setArguments(args);
+        return routeInfoFragment;
+    }
+
 
     @Inject
     IRouteInfoFragmentPresenter mPresenter;
@@ -36,8 +45,9 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
 
     @Override
     public void onAttach(Activity activity) {
-            super.onAttach(activity);
+        super.onAttach(activity);
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +72,6 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
         App.getApp().getRouteInfoComponent().inject(this);
         mPresenter.bindView(this);
         mPresenter.loadAndShowData(this.getArguments().getInt("id"));
-
         return v;
     }
 
@@ -76,6 +85,10 @@ public class RouteInfoFragment extends Fragment implements IRouteInfoFragment {
         mPresenter.releasePresenter();
         mPresenter = null;
         super.onDetach();
+    }
+
+    public int getRouteId() {
+        return this.getArguments().getInt("id", 0);
     }
 
     @Override

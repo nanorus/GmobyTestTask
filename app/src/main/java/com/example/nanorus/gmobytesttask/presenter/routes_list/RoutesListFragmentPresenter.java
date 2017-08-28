@@ -177,7 +177,7 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     @Override
     public void onListItemClicked() {
         try {
-            int clickedRouteId = mView.getDataByListPosition(mView.getListItemClickedPosition()).getId();
+            int clickedRouteId = mView.getDataByPositionAtList(mView.getListItemClickedPosition()).getId();
             mRoutesListRouter.navigateToRouteInfoActivity(mView.getViewContext(), clickedRouteId);
         } catch (NullPointerException e) {
             e.printStackTrace();

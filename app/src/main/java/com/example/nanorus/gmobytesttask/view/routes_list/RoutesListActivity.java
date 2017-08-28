@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.R;
 import com.example.nanorus.gmobytesttask.presenter.routes_list.IRoutesListActivityPresenter;
+import com.example.nanorus.gmobytesttask.view.route_info.RouteInfoFragment;
 
 import javax.inject.Inject;
 
@@ -26,6 +27,9 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
 
     private AlertDialog simpleAlert;
 
+    RouteInfoFragment routeInfoFragment;
+    private boolean isInfoFragmentExist = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +37,26 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
         setContentView(R.layout.activity_routes);
 
         activity_routes_tb_btn_profile = (Button) findViewById(R.id.activity_routes_tb_btn_profile);
-        activity_routes_tb_btn_profile.setOnClickListener(view -> {
-            mPresenter.onProfileClicked();
-        });
+        activity_routes_tb_btn_profile.setOnClickListener(view -> mPresenter.onProfileClicked());
 
         routesListFragment = (RoutesListFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_routes_list);
         activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
-
+        isInfoFragmentExist = findViewById(R.id.route_info_fragment_frame) != null;
         App.getApp().getRoutesListComponent().inject(this);
         mPresenter.bindView(this);
 
         activity_routes_swipe.setOnRefreshListener(() -> mPresenter.onRefresh());
+    }
 
+    private void showRouteInfoInFragment(int id) {
+        routeInfoFragment = (RouteInfoFragment)
+                getSupportFragmentManager().findFragmentById(R.id.route_info_fragment_frame);
+        if (routeInfoFragment == null || routeInfoFragment.getRouteId() != id) {
+            routeInfoFragment = RouteInfoFragment.newInstance(id);
+            getSupportFragmentManager().beginTransaction().replace(R.id.route_info_fragment_frame, routeInfoFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -71,6 +82,12 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
             if (activity_routes_swipe.isRefreshing())
                 activity_routes_swipe.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void showRouteInfoByPosition(int position) {
+        int routeId = routesListFragment.getRouteByPosition(position).getId();
+        showRouteInfoInFragment(routeId);
     }
 
     @Override
@@ -127,5 +144,8 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
         routesListFragment.updateListOnline();
     }
 
-
+    @Override
+    public boolean isInfoFragmentExist() {
+        return isInfoFragmentExist;
+    }
 }

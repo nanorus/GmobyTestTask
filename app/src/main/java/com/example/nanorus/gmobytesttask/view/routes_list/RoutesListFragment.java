@@ -2,6 +2,7 @@ package com.example.nanorus.gmobytesttask.view.routes_list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,7 +45,7 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     private int mListItemClickedPosition = 0;
 
     public void updateListOnline() {
-       // mPresenter.updateListOnline();
+        // mPresenter.updateListOnline();
         mPresenter.updateListOnlineService();
     }
 
@@ -62,15 +63,19 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
         void showSwipeRefreshing(boolean willShow);
 
+        void showRouteInfoByPosition(int position);
+
+        boolean isInfoFragmentExist();
+
     }
 
     @Override
     public void onAttach(Activity activity) {
-            try {
-                mActivityEventListener = (RoutesListEventListener) activity;
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            }
+        try {
+            mActivityEventListener = (RoutesListEventListener) activity;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
         super.onAttach(activity);
     }
 
@@ -99,6 +104,10 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     @Override
     protected String tag() {
         return "sample tag";
+    }
+
+    public RouteMainInfoPojo getRouteByPosition(int position) {
+        return mData.get(position);
     }
 
     @NonNull
@@ -143,7 +152,11 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
         RecyclerViewItemClickSupport.addTo(fragment_routes_list_rv_list).setOnItemClickListener((recyclerView, position, v1) -> {
             mListItemClickedPosition = position;
-            mPresenter.onListItemClicked();
+            if (mActivityEventListener.isInfoFragmentExist()
+                    && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mActivityEventListener.showRouteInfoByPosition(position);
+            } else
+                mPresenter.onListItemClicked();
         });
 
         return v;
@@ -236,7 +249,7 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     }
 
     @Override
-    public RouteMainInfoPojo getDataByListPosition(int position) {
+    public RouteMainInfoPojo getDataByPositionAtList(int position) {
         return mData.get(position);
     }
 

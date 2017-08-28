@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/routes_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ToolbarStyle">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/activity_routes_tb_btn_profile"
+                android:layout_alignBottom="@+id/activity_routes_tb_btn_profile"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:text="планшик"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+
+            <Button
+                android:id="@+id/activity_routes_tb_btn_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="профиль"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:id="@+id/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/routes_toolbar"
+        android:background="@drawable/toolbar_shadow"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/activity_routes_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/routes_toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <fragment
+                android:id="@+id/fragment_routes_list"
+                android:name="com.example.nanorus.gmobytesttask.view.routes_list.RoutesListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+          <FrameLayout
+              android:layout_weight="1"
+              android:id="@+id/route_info_fragment_frame"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+          </FrameLayout>
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</RelativeLayout>

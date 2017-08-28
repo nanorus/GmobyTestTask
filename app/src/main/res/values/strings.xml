@@ -23,5 +23,5 @@
     <string name="pathes_in_period">Маршруты по данному периоду</string>
     <string name="no_routes_at_this_period">Нет маршрутов за данный период</string>
     <string name="title_activity_profile">ProfileActivity</string>
-    <string name="pictures_directory">GmobyCamera/</string>
+    <string name="pictures_directory">/GmobyCamera/</string>
 </resources>

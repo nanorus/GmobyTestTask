@@ -36,7 +36,7 @@ public interface IRoutesListFragment {
 
     void showAlertFailLoading();
 
-    RouteMainInfoPojo getDataByListPosition(int position);
+    RouteMainInfoPojo getDataByPositionAtList(int position);
 
     int getListItemClickedPosition();
 
