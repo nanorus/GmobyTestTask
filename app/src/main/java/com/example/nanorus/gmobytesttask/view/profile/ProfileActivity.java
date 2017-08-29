@@ -1,3 +1,4 @@
+
 package com.example.nanorus.gmobytesttask.view.profile;
 
 import android.Manifest;
@@ -39,6 +40,7 @@ import java.util.List;
 
 public class ProfileActivity extends BasePresenterActivity<ProfilePresenter, IProfileActivity> implements IProfileActivity {
 
+
     private IProfilePresenter mPresenter;
 
     private SurfaceView mPreview;
@@ -72,6 +74,9 @@ public class ProfileActivity extends BasePresenterActivity<ProfilePresenter, IPr
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         updateAvatar();
+
+        System.out.println("use library");
+        Toast.makeText(this, "native test: " + String.valueOf(calculateSum(3, 5)), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -360,6 +365,13 @@ public class ProfileActivity extends BasePresenterActivity<ProfilePresenter, IPr
 
         }
 
+    }
+
+    public native int calculateSum(int first, int second);
+
+    static {
+        System.loadLibrary("native-lib");
+        System.out.println("load library");
     }
 
 }
