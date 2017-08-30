@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -74,8 +76,13 @@ public class ImageManager {
     public Bitmap loadImageFromCache(String url) {
         String fileName = getPathFromUrl(url);
         File file = new File(fileName);
+        int outDateDays = 7;
+        long outDateTime = TimeUnit.MILLISECONDS.toMillis(outDateDays);
         if (file.exists()) {
-            return BitmapFactory.decodeFile(file.getAbsolutePath());
+            if (!isFileOutdated(file, outDateTime))
+                return BitmapFactory.decodeFile(file.getAbsolutePath());
+            else
+                return null;
         } else
             return null;
 
@@ -115,5 +122,14 @@ public class ImageManager {
 
     }
 
+    public boolean isFileOutdated(File file, long outDateTime) {
+        Date currentDate = new Date(System.currentTimeMillis());
+        Date fileDate = new Date(file.lastModified());
+        long diffTime = currentDate.getTime() - fileDate.getTime();
+        if (diffTime > outDateTime)
+            return true;
+        else
+            return false;
+    }
 
 }
