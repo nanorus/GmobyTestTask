@@ -4,7 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-class DatabaseContract {
+public class DatabaseContract {
 
     @Inject
     public DatabaseContract() {

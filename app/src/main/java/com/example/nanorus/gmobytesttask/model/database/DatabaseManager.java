@@ -300,6 +300,17 @@ public class DatabaseManager {
         db.delete(mDatabaseContract.TABLE_NAME_TO_CITY, null, null);
     }
 
+    public  void saveImageNameAndUrl(String url, String name) {
+        // insert url and name to table (contentValues etc)
+        
+    }
+
+    public  String loadImageNameByUrl(String url) {
+        //  loadImageNameByUrl (cursor etc)
+        return null;
+    }
+
+
     private void defineTablesColumnsNames() {
         TABLE_NAME_ROUTES = mDatabaseContract.TABLE_NAME_ROUTES;
         TABLE_NAME_FROM_CITY = mDatabaseContract.TABLE_NAME_FROM_CITY;

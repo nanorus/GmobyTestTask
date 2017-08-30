@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "RoutesDatabase.db";
 
     @Inject
-    DatabaseHelper(Context context, DatabaseContract databaseContract) {
+    public DatabaseHelper(Context context, DatabaseContract databaseContract) {
         super(context, DB_NAME, null, DB_VERSION);
         mDatabaseContract = databaseContract;
     }

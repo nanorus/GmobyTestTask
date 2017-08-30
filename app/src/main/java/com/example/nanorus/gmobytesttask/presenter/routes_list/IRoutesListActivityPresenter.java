@@ -12,4 +12,5 @@ public interface IRoutesListActivityPresenter {
 
     void bindView(IRoutesListActivity activity);
 
+    void onPhotoClicked();
 }

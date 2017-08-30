@@ -51,6 +51,12 @@ public class DataManager {
         mDatabaseManager.cleanSavedRoutes();
     }
 
+    public  void saveImageNameAndUrl(String url, String name) {
+        mDatabaseManager.saveImageNameAndUrl(url, name);
+    }
 
+    public  String loadImageNameByUrl(String url) {
+        return mDatabaseManager.loadImageNameByUrl(url);
+    }
 
 }

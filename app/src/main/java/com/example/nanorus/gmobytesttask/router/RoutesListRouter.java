@@ -3,6 +3,7 @@ package com.example.nanorus.gmobytesttask.router;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.nanorus.gmobytesttask.image.ImageActivity;
 import com.example.nanorus.gmobytesttask.view.profile.ProfileActivity;
 import com.example.nanorus.gmobytesttask.view.route_info.RouteInfoActivity;
 
@@ -23,6 +24,11 @@ public class RoutesListRouter {
 
     public void navigateToProfileActivity(Context context){
         Intent intent = new Intent(context, ProfileActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void navigateToPhotoActivity(Context context){
+        Intent intent = new Intent(context, ImageActivity.class);
         context.startActivity(intent);
     }
 

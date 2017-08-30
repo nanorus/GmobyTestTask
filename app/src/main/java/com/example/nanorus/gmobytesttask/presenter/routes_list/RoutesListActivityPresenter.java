@@ -49,4 +49,9 @@ public class RoutesListActivityPresenter implements IRoutesListActivityPresenter
     public void bindView(IRoutesListActivity activity) {
         mView = activity;
     }
+
+    @Override
+    public void onPhotoClicked() {
+        mRoutesListRouter.navigateToPhotoActivity(mView.getViewContext());
+    }
 }

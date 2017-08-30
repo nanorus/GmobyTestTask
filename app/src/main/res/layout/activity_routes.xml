@@ -36,6 +36,15 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:text="профиль"/>
+
+            <Button
+                android:id="@+id/activity_routes_btn_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/activity_routes_tb_btn_profile"
+                android:layout_toStartOf="@+id/activity_routes_tb_btn_profile"
+                android:text="Фото"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
     <View

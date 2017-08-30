@@ -19,6 +19,7 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
 
     private SwipeRefreshLayout activity_routes_swipe;
     private Button activity_routes_tb_btn_profile;
+    private Button activity_routes_btn_photo;
 
     @Inject
     IRoutesListActivityPresenter mPresenter;
@@ -38,6 +39,8 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
 
         activity_routes_tb_btn_profile = (Button) findViewById(R.id.activity_routes_tb_btn_profile);
         activity_routes_tb_btn_profile.setOnClickListener(view -> mPresenter.onProfileClicked());
+        activity_routes_btn_photo = (Button) findViewById(R.id.activity_routes_btn_photo);
+        activity_routes_btn_photo.setOnClickListener(view -> mPresenter.onPhotoClicked());
 
         routesListFragment = (RoutesListFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_routes_list);

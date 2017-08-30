@@ -1,6 +1,10 @@
 package com.example.nanorus.gmobytesttask.di.model;
 
+import android.content.Context;
+
 import com.example.nanorus.gmobytesttask.model.api.service.GetAllRoutersService;
+import com.example.nanorus.gmobytesttask.model.database.DatabaseContract;
+import com.example.nanorus.gmobytesttask.model.database.DatabaseHelper;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -45,6 +49,12 @@ public class ModelModule {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Provides
+    @Singleton
+    DatabaseHelper provideDatabaseHelper (Context context, DatabaseContract databaseContract){
+        return new DatabaseHelper(context, databaseContract);
     }
 
 }
