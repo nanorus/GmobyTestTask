@@ -1,6 +1,7 @@
 package com.example.nanorus.gmobytesttask.image;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,10 @@ import java.util.ArrayList;
 public class ImageListActivity extends AppCompatActivity {
 
     RecyclerView activity_image_list_rv_gallery;
+    SwipeRefreshLayout activity_image_list_swipe_refresh;
 
+    ArrayList<String> urls;
+    ImagesAdapter imagesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +25,18 @@ public class ImageListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_list);
 
         activity_image_list_rv_gallery = (RecyclerView) findViewById(R.id.activity_image_list_rv_gallery);
+        activity_image_list_swipe_refresh = (SwipeRefreshLayout) findViewById(R.id.activity_image_list_swipe_refresh);
+        activity_image_list_swipe_refresh.setOnRefreshListener(() -> {
+            imagesAdapter = new ImagesAdapter(urls, true);
+            activity_image_list_rv_gallery.setAdapter(imagesAdapter);
+            if (activity_image_list_swipe_refresh.isRefreshing())
+                activity_image_list_swipe_refresh.setRefreshing(false);
+        });
+
 
         //RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        ArrayList<String> urls = new ArrayList<>();
+        urls = new ArrayList<>();
         urls.add("https://scontent-lga3-1.cdninstagram.com/t51.2885-19/s150x150/20838631_125433344756435_2081451927438098432_a.jpg");
         urls.add("https://sevia.ru/foto/foto-na-avu/foto-na-avu-08.jpg");
         urls.add("http://elitefon.ru/images/201503/elitefon.ru_38831.jpg");
@@ -42,8 +54,8 @@ public class ImageListActivity extends AppCompatActivity {
         urls.add("https://files4.adme.ru/files/news/part_79/793310/10092760-7f39e393d96eae85cc92d48a40450aca_970x-1000-8e173efc7b-1484579184.jpg");
         urls.add("https://photooboi.com.ua/uploads/images/360b360/6802.jpg");
         urls.add("http://www.vseznaika.org/wp-content/uploads/2016/03/pic-00892.jpg");
-        ImagesAdapter imagesAdapter = new ImagesAdapter(urls);
 
+        imagesAdapter = new ImagesAdapter(urls, false);
         activity_image_list_rv_gallery.setLayoutManager(layoutManager);
         activity_image_list_rv_gallery.setAdapter(imagesAdapter);
     }

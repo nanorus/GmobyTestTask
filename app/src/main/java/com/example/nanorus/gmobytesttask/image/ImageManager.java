@@ -77,12 +77,14 @@ public class ImageManager {
         String fileName = getPathFromUrl(url);
         File file = new File(fileName);
         int outDateDays = 7;
-        long outDateTime = TimeUnit.MILLISECONDS.toMillis(outDateDays);
+        long outDateTime = TimeUnit.DAYS.toMillis(outDateDays);
         if (file.exists()) {
-            if (!isFileOutdated(file, outDateTime))
+            if (!isFileOutdated(file, outDateTime)) {
                 return BitmapFactory.decodeFile(file.getAbsolutePath());
-            else
+            }
+            else {
                 return null;
+            }
         } else
             return null;
 
@@ -130,6 +132,28 @@ public class ImageManager {
             return true;
         else
             return false;
+    }
+
+    public void clearCache() {
+        File cacheDir = new File(cacheDirectory);
+        deleteDirectory(cacheDir);
+    }
+
+    private boolean deleteDirectory(File path) {
+        if (path.exists()) {
+            File[] files = path.listFiles();
+            if (files == null) {
+                return true;
+            }
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                } else {
+                    files[i].delete();
+                }
+            }
+        }
+        return (path.delete());
     }
 
 }
