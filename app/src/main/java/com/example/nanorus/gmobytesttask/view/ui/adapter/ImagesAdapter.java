@@ -37,6 +37,9 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImagesView
     @Override
     public void onBindViewHolder(ImagesViewHolder holder, int position) {
         String url = urls.get(position);
+
+        int widthPX = holder.mImageView.getLayoutParams().width;
+        int heightPX = holder.mImageView.getLayoutParams().height;
         holder.image_list_item_tv_url.setText(String.valueOf(position));
         holder.mImageView.setImageResource(R.color.cardview_light_background);
 
@@ -62,8 +65,9 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImagesView
                             String url = strings[0];
                             // download and save
                             Bitmap image = downloadImage(url);
-                            mImageManager.saveImageToCache(url, image);
-                            return image;
+                            Bitmap reducedImage = mImageMapper.reduceImage(image, widthPX, heightPX);
+                            mImageManager.saveImageToCache(url, reducedImage);
+                            return reducedImage;
                         }
 
                         @Override

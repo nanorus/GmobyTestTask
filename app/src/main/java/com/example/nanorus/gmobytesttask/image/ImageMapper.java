@@ -13,9 +13,9 @@ public class ImageMapper {
         return sInstance;
     }
 
-    public Bitmap cropImage(Bitmap originalImage) {
-        Bitmap croppedImage = null;
-        return croppedImage;
+    public Bitmap reduceImage(Bitmap originalImage, int widthPx, int heightPx) {
+        Bitmap reduceImage = Bitmap.createScaledBitmap(originalImage, widthPx, heightPx, true);
+        return reduceImage;
     }
 
 }
