@@ -25,19 +25,20 @@ public class ServiceManager {
 
     }
 
-    public Single<Boolean> loadRoutesList() {
-        System.out.println("serviceManager: loadRoutesList");
+    public Single<Boolean> loadRoutesList(String fromDate, String toDate) {
         return Single.create(singleSubscriber -> {
             mBroadcastReceiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
-                    System.out.println("onRecieve answer: " + intent.getBooleanExtra("is_data_downloaded", false));
                     singleSubscriber.onSuccess(intent.getBooleanExtra("is_data_downloaded", false));
                 }
             };
 
             IntentFilter intFilt = new IntentFilter(DownloadRoutesListService.BROADCAST_ACTION);
             LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver, intFilt);
-            mContext.startService(new Intent(mContext, DownloadRoutesListService.class));
+            Intent intent = new Intent(new Intent(mContext, DownloadRoutesListService.class));
+            intent.putExtra("from_date", fromDate);
+            intent.putExtra("to_date", toDate);
+            mContext.startService(intent);
         });
     }
 

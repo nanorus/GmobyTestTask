@@ -34,6 +34,8 @@ public interface IRoutesListFragment {
 
     int getListItemsCount();
 
+    int[] getDates();
+
     void showAlertFailLoading();
 
     RouteMainInfoPojo getDataByPositionAtList(int position);

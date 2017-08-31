@@ -2,7 +2,9 @@ package com.example.nanorus.gmobytesttask.view.routes_list;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,9 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
     private Button activity_routes_tb_btn_profile;
     private Button activity_routes_btn_photo;
 
+    private String mFromDate;
+    private String mToDate;
+
     @Inject
     IRoutesListActivityPresenter mPresenter;
 
@@ -37,14 +42,24 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
 
+        Intent intent = getIntent();
+        mFromDate = intent.getStringExtra("from_date");
+        mToDate = intent.getStringExtra("to_date");
+
         activity_routes_tb_btn_profile = (Button) findViewById(R.id.activity_routes_tb_btn_profile);
         activity_routes_tb_btn_profile.setOnClickListener(view -> mPresenter.onProfileClicked());
         activity_routes_btn_photo = (Button) findViewById(R.id.activity_routes_btn_photo);
         activity_routes_btn_photo.setOnClickListener(view -> mPresenter.onPhotoClicked());
-
-        routesListFragment = (RoutesListFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_routes_list);
         activity_routes_swipe = (SwipeRefreshLayout) findViewById(R.id.activity_routes_swipe);
+
+        routesListFragment = new RoutesListFragment();
+        Bundle dateArgs = new Bundle();
+        dateArgs.putString("from_date", mFromDate);
+        dateArgs.putString("to_date", mToDate);
+        routesListFragment.setArguments(dateArgs);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().add(R.id.fragment_routes_list, routesListFragment);
+        transaction.commit();
+
         isInfoFragmentExist = findViewById(R.id.route_info_fragment_frame) != null;
         App.getApp().getRoutesListComponent().inject(this);
         mPresenter.bindView(this);
@@ -151,4 +166,5 @@ public class RoutesListActivity extends AppCompatActivity implements IRoutesList
     public boolean isInfoFragmentExist() {
         return isInfoFragmentExist;
     }
+
 }

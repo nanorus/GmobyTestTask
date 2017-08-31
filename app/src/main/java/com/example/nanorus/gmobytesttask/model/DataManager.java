@@ -28,7 +28,7 @@ public class DataManager {
     }
 
     public Single<Boolean> loadRoutesOnlineFromService(int fromDate, int toDate) {
-        return mServiceManager.loadRoutesList();
+        return mServiceManager.loadRoutesList(String.valueOf(fromDate), String.valueOf(toDate));
     }
 
     public Single<RequestPojo> loadRoutesOnline(int fromDate, int toDate) {
@@ -51,12 +51,6 @@ public class DataManager {
         mDatabaseManager.cleanSavedRoutes();
     }
 
-    public  void saveImageNameAndUrl(String url, String name) {
-        mDatabaseManager.saveImageNameAndUrl(url, name);
-    }
 
-    public  String loadImageNameByUrl(String url) {
-        return mDatabaseManager.loadImageNameByUrl(url);
-    }
 
 }

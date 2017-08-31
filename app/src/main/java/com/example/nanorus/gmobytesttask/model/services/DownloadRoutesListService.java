@@ -50,7 +50,10 @@ public class DownloadRoutesListService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        String fromDate = intent.getStringExtra("from_date");
+        String toDate = intent.getStringExtra("to_date");
+        System.out.println("service: from_date: " + fromDate);
+        System.out.println("service: to_date: " + toDate);
         mRequestAsyncTask = new AsyncTask<String, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(String... strings) {
@@ -96,7 +99,7 @@ public class DownloadRoutesListService extends Service {
                 DownloadRoutesListService.this.stopSelf();
             }
         }
-                .execute("http://projects.gmoby.org/web/index.php/api/trips?from_date=20140101&to_date=20180501");
+                .execute("http://projects.gmoby.org/web/index.php/api/trips?from_date=" + fromDate + "&to_date=" + toDate);
         return super.onStartCommand(intent, flags, startId);
     }
 

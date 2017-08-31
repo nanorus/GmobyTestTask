@@ -68,11 +68,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <fragment
+            <FrameLayout
                 android:id="@+id/fragment_routes_list"
-                android:name="com.example.nanorus.gmobytesttask.view.routes_list.RoutesListFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+
         </LinearLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>

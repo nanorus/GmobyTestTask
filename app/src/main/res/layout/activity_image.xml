@@ -8,25 +8,67 @@
     tools:context=".image.ImageActivity">
 
     <ImageView
-        android:layout_margin="8dp"
         android:id="@+id/activity_image_iv_image"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/textView15"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        app:srcCompat="@mipmap/ic_launcher"/>
+        android:layout_alignParentStart="true"/>
 
     <Button
         android:id="@+id/activity_image_btn_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Image list"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100dp"
+        android:id="@+id/textView15"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView15"
+        android:layout_alignStart="@+id/textView15"
         android:layout_below="@+id/activity_image_iv_image"
-        android:layout_margin="8dp"
-        android:text="Image list"/>
+        android:text="100px"/>
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100sp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/textView17"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/textView18"
+        android:layout_alignLeft="@+id/textView18"
+        android:layout_alignStart="@+id/textView18"/>
 </RelativeLayout>

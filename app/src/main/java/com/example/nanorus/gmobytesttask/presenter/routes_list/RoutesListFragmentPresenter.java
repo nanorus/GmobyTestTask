@@ -100,6 +100,8 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
         ArrayList<RouteMainInfoPojo> routeMainInfoPojos = new ArrayList<>();
         request = new RequestPojo[1];
 
+        System.out.println("presenter: from_date: " + mFromDate);
+        System.out.println("presenter: to_date: " + mToDate);
         requestPojoSingle = mDataManager.loadRoutesOnline(mFromDate, mToDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -209,6 +211,10 @@ public class RoutesListFragmentPresenter implements IRoutesListFragmentPresenter
     @Override
     public void onViewAttached(IRoutesListFragment view) {
         this.mView = view;
+        mFromDate = mView.getDates()[0];
+        mToDate = mView.getDates()[1];
+        System.out.println("presenter: from_date: " + mFromDate);
+        System.out.println("presenter: to_date: " + mToDate);
 
         mView.createAndSetAdapter();
 

@@ -24,8 +24,11 @@ import com.example.nanorus.gmobytesttask.presenter.routes_list.RoutesListFragmen
 import com.example.nanorus.gmobytesttask.view.ui.RecyclerViewItemClickSupport;
 import com.example.nanorus.gmobytesttask.view.ui.adapter.RoutesListAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class RoutesListFragment extends BasePresenterFragment<RoutesListFragmentPresenter, IRoutesListFragment> implements IRoutesListFragment {
@@ -36,9 +39,13 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     private RoutesListAdapter mAdapter;
     private LinearLayoutManager mManager;
     private List<RouteMainInfoPojo> mData;
+    private String mFromDate;
+    private String mToDate;
 
     private RecyclerView fragment_routes_list_rv_list;
     private TextView fragment_routes_list_tv_no_data;
+    private TextView mTvPeriod;
+
 
     private RoutesListEventListener mActivityEventListener;
 
@@ -148,6 +155,12 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
 
         fragment_routes_list_rv_list = (RecyclerView) v.findViewById(R.id.fragment_routes_list_rv_list);
         fragment_routes_list_tv_no_data = (TextView) v.findViewById(R.id.fragment_routes_list_tv_no_data);
+        mTvPeriod = (TextView) v.findViewById(R.id.fragment_routes_list_tv_period);
+
+
+        mFromDate = getArguments().getString("from_date");
+        mToDate = getArguments().getString("to_date");
+        setPeriodTextByApiFormat(mFromDate, mToDate);
         hideNoDataText();
 
         RecyclerViewItemClickSupport.addTo(fragment_routes_list_rv_list).setOnItemClickListener((recyclerView, position, v1) -> {
@@ -158,10 +171,25 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
             } else
                 mPresenter.onListItemClicked();
         });
-
         return v;
     }
 
+    private void setPeriodTextByApiFormat(String fromDateApiFormat, String toDateApiFormat) {
+        System.out.println("fragment: to date: " + toDateApiFormat);
+        SimpleDateFormat materialFormat = new SimpleDateFormat("dd MMM yy", Locale.ENGLISH);
+        if (fromDateApiFormat != null && toDateApiFormat != null) {
+
+            Date fromDate = new Date(
+                    Integer.parseInt(fromDateApiFormat.substring(0, 4)),
+                    Integer.parseInt(fromDateApiFormat.substring(4, 6)) - 1,
+                    Integer.parseInt(fromDateApiFormat.substring(6, 8)));
+            Date toDate = new Date(
+                    Integer.parseInt(toDateApiFormat.substring(0, 4)),
+                    Integer.parseInt(toDateApiFormat.substring(4, 6)) - 1,
+                    Integer.parseInt(toDateApiFormat.substring(6, 8)));
+            mTvPeriod.setText(materialFormat.format(fromDate) + " - " + materialFormat.format(toDate));
+        }
+    }
 
     @Override
     public void createAndSetAdapter() {
@@ -241,6 +269,11 @@ public class RoutesListFragment extends BasePresenterFragment<RoutesListFragment
     @Override
     public int getListItemsCount() {
         return mData.size();
+    }
+
+    @Override
+    public int[] getDates() {
+        return new int[]{Integer.parseInt(mFromDate), Integer.parseInt(mToDate)};
     }
 
     @Override
