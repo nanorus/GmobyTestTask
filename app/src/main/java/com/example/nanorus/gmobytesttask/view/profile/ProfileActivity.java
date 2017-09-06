@@ -371,7 +371,6 @@ public class ProfileActivity extends BasePresenterActivity<ProfilePresenter, IPr
 
     static {
         System.loadLibrary("native-lib");
-        System.out.println("load library");
     }
 
 }

@@ -8,13 +8,10 @@ import android.os.Environment;
 import com.example.nanorus.gmobytesttask.App;
 import com.example.nanorus.gmobytesttask.model.DataManager;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -90,39 +87,7 @@ public class ImageManager {
 
     }
 
-    public Bitmap downloadImage(String url) {
-        Bitmap bitmap = null;
-        HttpURLConnection conn = null;
-        BufferedInputStream buf_stream = null;
 
-        try {
-            conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setDoInput(true);
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.connect();
-            buf_stream = new BufferedInputStream(conn.getInputStream(), 8192);
-            bitmap = BitmapFactory.decodeStream(buf_stream);
-
-            buf_stream.close();
-            conn.disconnect();
-            buf_stream = null;
-            conn = null;
-
-        } catch (IOException ignored) {
-        } catch (OutOfMemoryError e) {
-            return null;
-        } finally {
-            if (buf_stream != null)
-                try {
-                    buf_stream.close();
-                } catch (IOException ignored) {
-                }
-            if (conn != null)
-                conn.disconnect();
-        }
-        return bitmap;
-
-    }
 
     public boolean isFileOutdated(File file, long outDateTime) {
         Date currentDate = new Date(System.currentTimeMillis());

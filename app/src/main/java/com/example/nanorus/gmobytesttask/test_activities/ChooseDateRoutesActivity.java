@@ -35,6 +35,9 @@ public class ChooseDateRoutesActivity extends AppCompatActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_date_routes);
 
+        // for testing imageList
+        // startActivity(new Intent(this, ImageListActivity.class));
+
         mEditTextFromDate = (EditText) findViewById(R.id.activity_choose_date_routes_tv_from_date);
         mEditTextToDate = (EditText) findViewById(R.id.activity_choose_date_routes_tv_to_date);
         mButtonGo = (Button) findViewById(R.id.activity_choose_date_routes_btn_go);
